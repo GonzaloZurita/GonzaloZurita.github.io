@@ -363,6 +363,34 @@
       box-shadow: 0 6px 32px #38bdf855;
       border-left: 5px solid #2563eb;
     }
+    /* Company logo + header layout for experience items */
+    .experience-header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:8px;
+    }
+    .company-logo{
+      width:48px;
+      height:48px;
+      border-radius:8px;
+      object-fit:contain;
+      background:transparent;
+      filter:grayscale(100%) opacity(0.95);
+      flex:0 0 48px;
+    }
+    /* Allow specific logos to retain original colors when needed */
+    .company-logo.color {
+      filter: none !important;
+      opacity: 1 !important;
+    }
+    /* White background helper for logos that need a light canvas */
+    .company-logo.white-bg {
+      background: #ffffff; /* white canvas */
+      padding: 6px; /* give some breathing room */
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    }
     .experience-item h4 {
       font-size: 1.4rem;
       margin-bottom: 8px;
@@ -1040,8 +1068,13 @@
     <section id="experience" class="experience-section main-section">
       <h3 class="section-title">Professional Experience</h3>
       <div class="experience-item">
-        <h4>QA Engineer</h4>
-        <span class="experience-meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
+        <div class="experience-header">
+          <img class="company-logo color white-bg" src="assets/logos/ingram-micro.svg" alt="Ingram Micro logo" loading="lazy" />
+          <div>
+            <h4>QA Engineer</h4>
+            <span class="experience-meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
+          </div>
+        </div>
         <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Ingram Micro is a global technology distributor and Xvantage is their digital platform for cloud and IT solutions.</p>
         <ul>
           <li>Implemented a full automation framework for ETL testing, integrating it into CI/CD pipelines and regression suites — resulting in fewer production incidents and improved release stability.</li>
@@ -1053,8 +1086,13 @@
         </ul>
       </div>
       <div class="experience-item">
-        <h4>Quality Assurance Engineer</h4>
-        <span class="experience-meta">Rootstrap - Caramel | August 2022 - February 2024</span>
+        <div class="experience-header">
+          <img class="company-logo color" src="assets/logos/rootstrap.png" alt="Rootstrap logo" loading="lazy" />
+          <div>
+            <h4>Quality Assurance Engineer</h4>
+            <span class="experience-meta">Rootstrap - Caramel | August 2022 - February 2024</span>
+          </div>
+        </div>
         <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Rootstrap is a software development agency; Caramel is a fintech platform for car buying and financing.</p>
         <ul>
           <li>Collaborated on a large-scale web and mobile platform with multiple third-party integrations.</li>
@@ -1064,8 +1102,13 @@
         </ul>
       </div>
       <div class="experience-item">
-        <h4>Quality Assurance Engineer</h4>
-        <span class="experience-meta">Fligoo - Broadridge | October 2020 - August 2022</span>
+        <div class="experience-header">
+          <img class="company-logo" src="assets/logos/fligoo.svg" alt="Fligoo logo" loading="lazy" />
+          <div>
+            <h4>Quality Assurance Engineer</h4>
+            <span class="experience-meta">Fligoo - Broadridge | October 2020 - August 2022</span>
+          </div>
+        </div>
         <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Fligoo is an AI/analytics company; Broadridge is a global fintech leader in investor communications and technology.</p>
         <ul>
           <li>Managed estimations, QA reporting, planning activities, and testing documentation.</li>
@@ -1081,8 +1124,13 @@
 
       <div id="olderExperiences" style="display:none">
         <div class="experience-item">
-          <h4>Quality Analyst -> Quality Assurance Lead</h4>
-          <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
+          <div class="experience-header">
+            <img class="company-logo" src="assets/logos/globant.svg" alt="Globant logo" loading="lazy" />
+            <div>
+              <h4>Quality Analyst -> Quality Assurance Lead</h4>
+              <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
+            </div>
+          </div>
           <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">QA for a major financial services engagement with Ernst & Young. Began as Quality Analyst and was promoted to Quality Assurance Lead, combining hands-on testing with client reporting and team coordination.</p>
           <ul>
             <li>Promoted from Quality Analyst to Quality Assurance Lead; managed estimations, reporting, and QA planning across project streams.</li>
@@ -1094,8 +1142,13 @@
         </div>
 
         <div class="experience-item">
-          <h4>Testing Analyst</h4>
-          <span class="experience-meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
+          <div class="experience-header">
+            <img class="company-logo color" src="assets/logos/claro.svg" alt="Claro logo" loading="lazy" />
+            <div>
+              <h4>Testing Analyst</h4>
+              <span class="experience-meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
+            </div>
+          </div>
           <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Testing analyst for the customer service software development team supporting Claro in Argentina, Uruguay and Paraguay; provided analysis and execution of manual and automated tests to ensure release quality.</p>
           <ul>
             <li>Executed manual and automated tests for customer service platforms.</li>
