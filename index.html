@@ -858,17 +858,20 @@
       if(btn && full){
         btn.addEventListener('click', function(){
           const expanded = btn.getAttribute('aria-expanded') === 'true';
+          // preserve current scroll position to avoid page jump when content height changes
+          const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
           if(expanded){
             full.style.display = 'none';
             btn.textContent = 'Show full skills';
             btn.setAttribute('aria-expanded','false');
+            // restore previous scroll position after layout changes
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
           } else {
             full.style.display = 'block';
             btn.textContent = 'Show less';
             btn.setAttribute('aria-expanded','true');
-            // scroll into view of the section when expanded
-            const section = document.getElementById('technical-skills');
-            if(section) section.scrollIntoView({behavior:'smooth', block:'start'});
+            // restore previous scroll position after layout changes
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
           }
         });
       }
@@ -881,14 +884,20 @@
       if(btn && older){
         btn.addEventListener('click', function(){
           const expanded = btn.getAttribute('aria-expanded') === 'true';
+          // preserve current scroll position to avoid page jump when content height changes
+          const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
           if(expanded){
             older.style.display = 'none';
             btn.textContent = 'Show older experience';
             btn.setAttribute('aria-expanded','false');
+            // allow layout to settle then restore scroll
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
           } else {
-              older.style.display = 'block';
-              btn.textContent = 'Show less';
-              btn.setAttribute('aria-expanded','true');
+            older.style.display = 'block';
+            btn.textContent = 'Show less';
+            btn.setAttribute('aria-expanded','true');
+            // allow layout to settle then restore scroll
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
           }
         });
       }
@@ -983,6 +992,9 @@
         <img src="profile.jpg" alt="Profile photo of Gonzalo Zurita" class="profile-pic" />
         <h1>Gonzalo Zurita</h1>
         <h2>QA Automation Engineer</h2>
+        <p style="color:#8faadc;font-size:1.05rem;margin-top:6px;font-weight:600;">
+          QA Automation Engineer — FinTech & Enterprise Cloud Platforms
+        </p>
         <p class="hero-description">
           QA Automation Engineer with 5+ years of experience in enterprise software quality assurance,<br>
           backend systems, API testing, and ETL validation.<br><br>
