@@ -627,25 +627,76 @@
         }
 
         /* Print Styles */
+        /* Print Styles (compact CV) */
         @media print {
+          html, body { background:#fff !important; color:#222 !important; }
           body, .container {
             background:#fff !important;
             color:#222 !important;
             box-shadow:none !important;
+            margin:0 !important;
+            padding:0 !important;
+            font-size:12px !important;
+            line-height:1.25 !important;
           }
-          .sticky-header, .toggle-mode, .back-to-top, .download-pdf-btn {
+          /* hide UI chrome */
+          .sticky-header, .toggle-mode, .back-to-top, .download-pdf-btn, .show-more-wrap {
             display:none !important;
           }
-          section, .card, .project-card, .expertise-item {
+          /* simplify section visuals */
+          section, .card, .project-card, .expertise-item, .experience-item, .expertise-category {
             background:#fff !important;
             color:#222 !important;
             box-shadow:none !important;
             border:none !important;
+            padding:6px 0 !important;
+            margin:0 0 8px 0 !important;
           }
-          a {
-            color:#222 !important;
-            text-decoration:underline !important;
+          .container { max-width:780px !important; padding:8px !important; }
+          /* Hide contact form on print */
+          #contact-form-section { display:none !important; }
+          /* Dark-mode print variant */
+          html.print-dark-mode, html.print-dark-mode body, body.print-dark-mode, body.print-dark-mode .container {
+            background:#0b1120 !important;
+            color:#e2e8f0 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
+          html.print-dark-mode .section-title, body.print-dark-mode .section-title { color:#fff !important; }
+          html.print-dark-mode .expertise-category, body.print-dark-mode .expertise-category,
+          html.print-dark-mode .experience-item, body.print-dark-mode .experience-item,
+          html.print-dark-mode .expertise-item, body.print-dark-mode .expertise-item {
+            background: transparent !important;
+            color:#cbd5e1 !important;
+            box-shadow: none !important;
+          }
+          html.print-dark-mode .mini-skill-card, body.print-dark-mode .mini-skill-card {
+            background:transparent !important;
+            border-color:#2563eb66 !important;
+            color:#38bdf8 !important;
+          }
+          .main-section { padding:8px 0 !important; }
+          .section-title { font-size:1.1rem !important; margin-bottom:6px !important; }
+          .hero-description, .profile-pic { display:none !important; }
+          .profile-pic{ width:60px !important; height:60px !important; }
+          /* Compact experience: only show first 3 bullets */
+          .experience-item ul li { display:none !important; }
+          .experience-item ul li:nth-child(-n+3) { display:list-item !important; }
+          .experience-item { page-break-inside: avoid; }
+          /* Keep full skills visible but pack them tighter into more columns */
+          #fullSkills { display:block !important; }
+          .top-skills { display:flex !important; flex-wrap:wrap; gap:6px !important; }
+          .skill-badge{ padding:6px 10px !important; font-size:0.9rem !important; }
+          /* Make grouped cards flow tighter and use 3 columns to save vertical space */
+          .grouped-skills { grid-template-columns: repeat(3, 1fr) !important; gap:8px !important; }
+          .expertise-category { padding:8px !important; }
+          .mini-skill-cards { gap:6px !important; }
+          .mini-skill-card{ padding:6px 10px !important; font-size:0.85rem !important; }
+          /* Allow QA Skills card to span more columns on print */
+          .grouped-skills .expertise-category.wide { grid-column: span 3 !important; }
+          /* Avoid page breaks inside small blocks */
+          .expertise-category, .expertise-item { page-break-inside: avoid; }
+          a { color:#222 !important; text-decoration:underline !important; }
         }
     .sticky-header a{
       color:#38bdf8;
@@ -782,6 +833,7 @@
     <a href="#education">Education</a>
     <a href="#contact-form-section">Contact</a>
     <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
+    <button class="download-pdf-btn" id="downloadPdfDarkBtn" style="margin-left:10px;padding:7px 14px;border-radius:999px;background:#0f172a;color:#38bdf8;border:1px solid #2563eb33;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF (Dark)</button>
   </div>
 
   <script>
@@ -853,6 +905,53 @@
           applyMode(!document.body.classList.contains('light-mode'));
         });
       }
+    })();
+
+    // Download PDF button: prepare compact view and trigger print
+    (function(){
+      const downloadBtn = document.getElementById('downloadPdfBtn');
+      const full = document.getElementById('fullSkills');
+      if(!downloadBtn) return;
+      downloadBtn.addEventListener('click', function(){
+        let prevDisplay = null;
+        if(full){ prevDisplay = full.style.display; full.style.display = 'none'; }
+        // ensure light-mode off for print clarity
+        document.body.classList.remove('light-mode');
+        // small timeout to let styles apply then print
+        setTimeout(() => { window.print(); }, 200);
+        // restore after print using onafterprint when supported
+        const restore = () => { if(full) full.style.display = prevDisplay; window.removeEventListener('afterprint', restore); };
+        window.addEventListener('afterprint', restore);
+        // fallback restore in 2s
+        setTimeout(restore, 2000);
+      });
+    })();
+
+    // Download PDF (Dark) - keep dark look in print
+    (function(){
+      const downloadDark = document.getElementById('downloadPdfDarkBtn');
+      const full = document.getElementById('fullSkills');
+      if(!downloadDark) return;
+      downloadDark.addEventListener('click', function(){
+        let prevDisplay = null;
+        if(full){ prevDisplay = full.style.display; full.style.display = 'block'; }
+        // apply print dark mode class to both html and body for maximum specificity
+        document.documentElement.classList.add('print-dark-mode');
+        document.body.classList.add('print-dark-mode');
+        // make sure light-mode is off
+        document.body.classList.remove('light-mode');
+        // allow styles to settle
+        setTimeout(() => { window.print(); }, 250);
+        const restore = () => {
+          document.documentElement.classList.remove('print-dark-mode');
+          document.body.classList.remove('print-dark-mode');
+          if(full) full.style.display = prevDisplay;
+          window.removeEventListener('afterprint', restore);
+        };
+        window.addEventListener('afterprint', restore);
+        // fallback restore in case afterprint isn't fired
+        setTimeout(restore, 3000);
+      });
     })();
   </script>
 
