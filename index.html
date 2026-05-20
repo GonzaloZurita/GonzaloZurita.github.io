@@ -874,6 +874,28 @@
       }
     });
 
+    // Older experiences toggle (hidden by default)
+    document.addEventListener('DOMContentLoaded', function(){
+      const btn = document.getElementById('showOlderBtn');
+      const older = document.getElementById('olderExperiences');
+      if(btn && older){
+        btn.addEventListener('click', function(){
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          if(expanded){
+            older.style.display = 'none';
+            btn.textContent = 'Show older experience';
+            btn.setAttribute('aria-expanded','false');
+          } else {
+            older.style.display = 'block';
+            btn.textContent = 'Show less';
+            btn.setAttribute('aria-expanded','true');
+            const section = document.getElementById('experience');
+            if(section) section.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        });
+      }
+    });
+
     // Light / Dark mode toggle (persist in localStorage, respect system pref)
     (function(){
       const btnMode = document.getElementById('toggleModeBtn');
@@ -1044,6 +1066,44 @@
           <li>Participated in enterprise validation processes and quality assurance operations.</li>
           <li>Used Cypress to automate frontend validations and UI testing for web applications.</li>
         </ul>
+      </div>
+      <div class="show-more-wrap">
+        <button class="show-more-btn" id="showOlderBtn" aria-expanded="false">Show older experience</button>
+      </div>
+
+      <div id="olderExperiences" style="display:none">
+        <div class="experience-item">
+          <h4>Quality Assurance Lead</h4>
+          <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
+          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Led QA management and administrative activities including estimations, reporting, planning, and client presentations. Actively contributed to strategy and task assignment for testing analysts across the team.</p>
+          <ul>
+            <li>Managed estimations, reporting and QA planning for multiple streams.</li>
+            <li>Delivered client presentations and coordinated cross-team testing strategy.</li>
+            <li>Assigned tasks and mentored testing analysts to improve quality delivery.</li>
+          </ul>
+        </div>
+
+        <div class="experience-item">
+          <h4>Quality Analyst</h4>
+          <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
+          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Designed and executed test cases, performed exploratory, smoke and regression testing, and end-to-end testing for a major international financial client.</p>
+          <ul>
+            <li>Designed test cases and executed comprehensive test plans.</li>
+            <li>Performed exploratory, smoke and regression testing on critical modules.</li>
+            <li>Coordinated with development teams to resolve defects and validate fixes.</li>
+          </ul>
+        </div>
+
+        <div class="experience-item">
+          <h4>Testing Analyst</h4>
+          <span class="experience-meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
+          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Testing analyst for the customer service software development team supporting Claro in Argentina, Uruguay and Paraguay; provided analysis and execution of manual and automated tests to ensure release quality.</p>
+          <ul>
+            <li>Executed manual and automated tests for customer service platforms.</li>
+            <li>Provided QA support across regional teams (Argentina, Uruguay, Paraguay).</li>
+            <li>Assisted in test analysis, defect reporting and verification.</li>
+          </ul>
+        </div>
       </div>
     </section>
     <div class="section-divider"></div>
