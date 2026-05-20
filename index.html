@@ -246,17 +246,25 @@
     .stack{
       display:flex;
       flex-wrap:wrap;
-      gap:15px;
-      margin-bottom:35px;
+      gap:12px 16px;
+      margin:0 auto 35px auto;
+      justify-content:center;
+      max-width:900px;
     }
 
     .stack span{
       background:#111c34;
       border:1px solid #1e293b;
-      padding:10px 18px;
+      padding:8px 14px;
       border-radius:999px;
       font-size:0.95rem;
       color:#38bdf8;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      flex: 0 1 auto;
+      min-width: 0;
     }
 
     .contact{
@@ -903,7 +911,7 @@
       }
     });
 
-    // Light / Dark mode toggle (persist in localStorage, respect system pref)
+    // Light / Dark mode toggle — default to dark mode (ignore local config)
     (function(){
       const btnMode = document.getElementById('toggleModeBtn');
       const bodyEl = document.body;
@@ -917,20 +925,13 @@
           btnMode.textContent = '🌙';
           btnMode.setAttribute('aria-label','Switch to light mode');
         }
-        try{ localStorage.setItem('theme', isLight ? 'light' : 'dark'); }catch(e){}
+        // Do not persist theme in localStorage — site defaults to dark on every load
       }
-      // initialize
-      try{
-        const stored = localStorage.getItem('theme');
-        if(stored === 'light') applyMode(true);
-        else if(stored === 'dark') applyMode(false);
-        else {
-          const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-          applyMode(prefersLight);
-        }
-      }catch(e){ /* ignore localStorage errors */ }
+      // initialize: always start in dark mode regardless of user or system prefs
+      applyMode(false);
       if(btnMode){
         btnMode.addEventListener('click', function(){
+          // allow temporary toggle during the session, but do not persist
           applyMode(!document.body.classList.contains('light-mode'));
         });
       }
@@ -997,17 +998,17 @@
           <span class="mini-skill-card" style="background: linear-gradient(90deg,#2563eb 0%, #38bdf8 100%); color:#0b1120; border:none; font-weight:700;">Enterprise Cloud Platforms</span>
         </div>
         <p class="hero-description">
-          QA Automation Engineer with 5+ years specializing in FinTech and enterprise cloud platforms. Expert in building scalable test automation and CI/CD validation pipelines, API and backend testing, and data/ETL verification. I design data-driven QA strategies and leverage automation and AI-assisted workflows to reduce defects, speed releases, and improve reliability for complex enterprise systems.
+          QA Automation Engineer with 5+ years specializing in FinTech and enterprise cloud platforms. Experienced in building scalable automation and CI/CD validation pipelines, API and backend testing, and data/ETL verification. I design data-driven QA strategies and leverage automation and AI-assisted workflows to reduce defects, speed releases, and improve reliability for complex enterprise systems.
         </p>
         <div class="stack">
           <span>Python</span>
+          <span>Test Automation</span>
           <span>Playwright</span>
-          <span>Cypress</span>
-          <span>SQL</span>
-          <span>ETL Validation</span>
-          <span>API Testing</span>
-          <span>AI Workflows</span>
-          <span>Backend QA</span>
+          <span>API & Backend Testing</span>
+          <span>CI/CD</span>
+          <span>ETL Validations</span>
+          <span>AI-assisted Development</span>
+          <span>Agentic Test Automation</span>
         </div>
         <div class="contact" id="contact">
           <a href="mailto:gonzalo.zurita92@gmail.com" title="Email">
@@ -1043,12 +1044,12 @@
         <span class="experience-meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
         <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Ingram Micro is a global technology distributor and Xvantage is their digital platform for cloud and IT solutions.</p>
         <ul>
-          <li>Performed end-to-end testing for enterprise subscription management platforms and reseller provisioning systems used by large-scale service providers.</li>
-          <li>Worked on ETL validation and automation initiatives focused on data quality, transformation testing, and backend verification.</li>
-          <li>Used AI-assisted workflows and intelligent agent-based tooling to accelerate test creation, validation, and analysis processes.</li>
+          <li>Implemented a full automation framework for ETL testing, integrating it into CI/CD pipelines and regression suites — resulting in fewer production incidents and improved release stability.</li>
+          <li>Performed end-to-end testing for enterprise subscription management platforms and reseller provisioning systems, increasing release confidence for key deployments.</li>
+          <li>Designed and executed ETL validation and automation initiatives focused on data quality, transformation testing, and backend verification.</li>
+          <li>Accelerated test creation and analysis by adopting AI-assisted workflows and intelligent agent-based tooling.</li>
           <li>Executed backend, API, integration, and enterprise-level system testing across multiple internal platform components.</li>
-          <li>Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency.</li>
-          <li>Contributed to improving validation efficiency through automation-oriented QA processes and AI-assisted workflows.</li>
+          <li>Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency across releases.</li>
         </ul>
       </div>
       <div class="experience-item">
@@ -1080,24 +1081,15 @@
 
       <div id="olderExperiences" style="display:none">
         <div class="experience-item">
-          <h4>Quality Assurance Lead</h4>
+          <h4>Quality Analyst -> Quality Assurance Lead</h4>
           <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
-          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Led QA management and administrative activities including estimations, reporting, planning, and client presentations. Actively contributed to strategy and task assignment for testing analysts across the team.</p>
+          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">QA for a major financial services engagement with Ernst & Young. Began as Quality Analyst and was promoted to Quality Assurance Lead, combining hands-on testing with client reporting and team coordination.</p>
           <ul>
-            <li>Managed estimations, reporting and QA planning for multiple streams.</li>
-            <li>Delivered client presentations and coordinated cross-team testing strategy.</li>
-            <li>Assigned tasks and mentored testing analysts to improve quality delivery.</li>
-          </ul>
-        </div>
-
-        <div class="experience-item">
-          <h4>Quality Analyst</h4>
-          <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
-          <p style="color:#8faadc;font-size:0.98rem;margin-bottom:8px;">Designed and executed test cases, performed exploratory, smoke and regression testing, and end-to-end testing for a major international financial client.</p>
-          <ul>
-            <li>Designed test cases and executed comprehensive test plans.</li>
-            <li>Performed exploratory, smoke and regression testing on critical modules.</li>
-            <li>Coordinated with development teams to resolve defects and validate fixes.</li>
+            <li>Promoted from Quality Analyst to Quality Assurance Lead; managed estimations, reporting, and QA planning across project streams.</li>
+            <li>Presented test findings and status to client stakeholders and coordinated cross-team testing strategy.</li>
+            <li>Designed and executed test cases (exploratory, smoke, regression) validating critical financial workflows.</li>
+            <li>Mentored testing analysts, delegated tasks, and improved QA processes to increase delivery reliability.</li>
+            <li>Worked with development teams to triage defects, verify fixes, and reduce rework during releases.</li>
           </ul>
         </div>
 
