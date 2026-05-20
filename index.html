@@ -886,11 +886,9 @@
             btn.textContent = 'Show older experience';
             btn.setAttribute('aria-expanded','false');
           } else {
-            older.style.display = 'block';
-            btn.textContent = 'Show less';
-            btn.setAttribute('aria-expanded','true');
-            const section = document.getElementById('experience');
-            if(section) section.scrollIntoView({behavior:'smooth', block:'start'});
+              older.style.display = 'block';
+              btn.textContent = 'Show less';
+              btn.setAttribute('aria-expanded','true');
           }
         });
       }
