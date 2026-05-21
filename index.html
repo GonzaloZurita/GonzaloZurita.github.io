@@ -633,6 +633,22 @@
       font-family:'Montserrat', Arial, Helvetica, sans-serif;
       transition:background 0.4s;
     }
+
+    /* Reserve space for the fixed toggle and make header responsive */
+    @media(max-width:900px){
+      /* Compact header: show only one title centered; arrows on both sides */
+      .sticky-header{
+        justify-content:center;
+        gap:12px;
+        padding-left:60px; /* space for left arrow */
+        padding-right:120px; /* space for right arrow + toggle */
+        overflow:visible;
+      }
+      .sticky-header a{ display:none; white-space:nowrap; }
+      .sticky-header a.active{ display:block; font-size:1.6rem; }
+      .sticky-header .download-pdf-btn{ display:none; }
+      .toggle-mode{ right:18px; }
+    }
         /* Fade-in Animations */
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -648,7 +664,7 @@
           position:fixed;
           top:18px;
           right:32px;
-          z-index:200;
+          z-index:90;
           background:#111c34;
           color:#38bdf8;
           border:none;
@@ -662,6 +678,34 @@
         .toggle-mode:hover {
           background:#38bdf8;
           color:#0b1120;
+        }
+
+        /* Hide download buttons in light mode as requested */
+        body.light-mode .download-pdf-btn { display:none !important; }
+
+        /* Header navigation arrows (small screens) */
+        .header-nav{
+          display:none;
+          position:absolute;
+          top:50%;
+          transform:translateY(-50%);
+          background:transparent;
+          border:1px solid rgba(255,255,255,0.06);
+          color:#38bdf8;
+          width:44px;
+          height:44px;
+          border-radius:10px;
+          cursor:pointer;
+          align-items:center;
+          justify-content:center;
+          font-size:1.3rem;
+          z-index:220;
+        }
+        .header-nav:active{ transform:translateY(-50%) scale(0.98); }
+        @media(max-width:900px){
+          .header-nav{ display:flex; }
+          .header-nav.prev{ left:10px; }
+          .header-nav.next{ right:62px; }
         }
 
         body.light-mode {
@@ -920,7 +964,41 @@
 
     .show-more-wrap{ display:flex; justify-content:center; width:100%; margin-top:8px }
 
+    /* Education & Certifications cards */
+    .edu-grid{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    .edu-card{
+      position:relative;
+      flex:1 1 320px;
+      min-width:260px;
+      background:linear-gradient(180deg,#071220 0%, #0b1f33 100%);
+      border-radius:14px;
+      padding:18px 18px 18px 22px;
+      box-shadow:0 6px 24px rgba(3,10,25,0.6), inset 0 -2px 0 rgba(255,255,255,0.02);
+      overflow:hidden;
+      transition:transform 0.18s ease, box-shadow 0.18s ease;
+      border:1px solid rgba(56,189,248,0.06);
+    }
+    .edu-card:hover{ transform:translateY(-6px); box-shadow:0 12px 36px rgba(3,10,25,0.7); }
+    .edu-card .accent{ position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(180deg,#38bdf8,#2563eb); border-top-left-radius:14px; border-bottom-left-radius:14px; }
+    .edu-card h4{ margin:0 0 6px 0; color:#e6f6ff; font-size:1.05rem; }
+    .edu-card .experience-meta{ display:block; color:#9fb6d9; margin-bottom:8px; font-size:0.95rem; }
+    .edu-card .edu-note{ color:#c9e6ff; font-size:0.95rem; margin:6px 0 0 0; }
+    .edu-card .cert-badge{ position:absolute; right:12px; top:12px; background:linear-gradient(90deg,#ffd166,#ff8a00); color:#0b0b0b; padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.28); }
+    @media(max-width:900px){ .edu-grid{ flex-direction:column; } .edu-card{ min-width: auto; } }
+
+    /* Light mode adjustments */
+    body.light-mode .edu-card{ background:linear-gradient(180deg,#ffffff,#f1f5f9); color:#0b1220; border:1px solid #e6eef9; box-shadow:0 6px 18px rgba(2,6,23,0.06); }
+    body.light-mode .edu-card .accent{ background:linear-gradient(180deg,#60a5fa,#38bdf8); }
+    body.light-mode .edu-card .experience-meta{ color:#475569; }
+
   </style>
+
 
 </head>
 
@@ -932,13 +1010,14 @@
   <button class="toggle-mode" id="toggleModeBtn" aria-label="Toggle light/dark mode">🌙</button>
 
   <div class="sticky-header">
-    <a href="#" style="font-size:1.2rem;letter-spacing:-1px;">Gonzalo Zurita</a>
     <a href="#experience">Experience</a>
     <a href="#technical-skills">Technical Skills</a>
     <a href="#professional-development">Professional Development</a>
     <a href="#recommendations">Recommendations</a>
     <a href="#education">Education</a>
     <a href="#contact-form-section">Contact</a>
+    <button id="headerNavPrev" class="header-nav prev" aria-label="Scroll header left">‹</button>
+    <button id="headerNavNext" class="header-nav next" aria-label="Scroll header right">›</button>
     <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
     <button class="download-pdf-btn" id="downloadPdfDarkBtn" style="margin-left:10px;padding:7px 14px;border-radius:999px;background:#0f172a;color:#38bdf8;border:1px solid #2563eb33;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF (Dark)</button>
   </div>
@@ -982,6 +1061,33 @@
           }
         });
       }
+    });
+    // Header nav compact mode: show one title and navigate with arrows on small screens
+    document.addEventListener('DOMContentLoaded', function(){
+      const headerEl = document.querySelector('.sticky-header');
+      const prev = document.getElementById('headerNavPrev');
+      const next = document.getElementById('headerNavNext');
+      if(!headerEl || !prev || !next) return;
+      const navLinks = Array.from(headerEl.querySelectorAll('a'));
+      if(!navLinks.length) return;
+      let active = 0;
+      function setActive(i){
+        active = ((i % navLinks.length) + navLinks.length) % navLinks.length;
+        navLinks.forEach((a, idx) => a.classList.toggle('active', idx === active));
+      }
+      prev.addEventListener('click', function(e){ e.preventDefault(); setActive(active - 1); });
+      next.addEventListener('click', function(e){ e.preventDefault(); setActive(active + 1); });
+      function enterCompact(){ prev.style.display = 'flex'; next.style.display = 'flex'; setActive(active); }
+      function leaveCompact(){ prev.style.display = 'none'; next.style.display = 'none'; navLinks.forEach(a=>a.classList.remove('active')); }
+      const toggle = document.getElementById('toggleModeBtn');
+      function updateTogglePosition(){
+        if(!toggle || !headerEl) return;
+        const h = headerEl.offsetHeight || 0;
+        toggle.style.top = (h + 8) + 'px';
+      }
+      function checkMode(){ if(window.innerWidth <= 900) enterCompact(); else leaveCompact(); updateTogglePosition(); }
+      checkMode();
+      window.addEventListener('resize', checkMode);
     });
 
     // Older experiences toggle (hidden by default)
@@ -1424,7 +1530,7 @@
         <div class="expertise-item">Playwright Automation Frameworks</div>
         <div class="expertise-item">Cypress End-to-End Testing</div>
         <div class="expertise-item">AI-driven QA Automation</div>
-        <div class="expertise-item">Automation Architecture & CI/CD Concepts</div>
+        <div class="expertise-item">Automation Architecture & CI/CD</div>
       </div>
     </section>
     <div class="section-divider"></div>
@@ -1512,14 +1618,19 @@
     <!-- EDUCATION -->
     <section id="education" class="main-section">
       <h3 class="section-title">Education & Certifications</h3>
-      <div class="experience-item">
-        <h4>Software and Information Systems Engineering</h4>
-        <span class="experience-meta">Universidad Tecnológica Nacional (UTN-FRC)</span>
-        <p>Unfinished Degree</p>
-      </div>
-      <div class="experience-item">
-        <h4>Certified Product Owner</h4>
-        <p>Scrum Manager Credential</p>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="accent"></div>
+          <h4>Software and Information Systems Engineering</h4>
+          <span class="experience-meta">Universidad Tecnológica Nacional (UTN-FRC)</span>
+          <p class="edu-note"><em>Completed 4th year; degree not completed.</em></p>
+        </div>
+        <div class="edu-card">
+          <div class="accent"></div>
+          <a class="cert-badge" href="https://scrummanager.com/website/c/profile/member.php?id=39831" target="_blank" rel="noopener">Certificate</a>
+          <h4>Certified Product Owner</h4>
+          <p>Scrum Manager Credential</p>
+        </div>
       </div>
     </section>
     <div class="section-divider"></div>
