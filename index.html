@@ -446,21 +446,38 @@
     }
 
     .expertise-item{
-      background:#10192b;
-      border-left: 5px solid #38bdf8;
-      border-radius: 14px;
-      box-shadow: 0 2px 16px #38bdf822;
-      color:#38bdf8;
-      font-weight:bold;
-      padding: 28px 22px 22px 28px;
-      font-size:1.08rem;
+      /* Modern elevated card look for professional-development items (smaller accent) */
+      background: linear-gradient(180deg, rgba(16,25,43,0.85), rgba(10,15,30,0.85));
+      border: 1px solid rgba(56,189,248,0.06);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.45);
+      color:#cfeeff;
+      font-weight:700;
+      padding: 16px 14px 16px 14px;
+      font-size:1.02rem;
       margin-bottom:0;
-      transition:box-shadow 0.2s, border-color 0.2s;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
       position: relative;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .expertise-item::before{
+      /* Smaller circular accent (subtle dot) to replace the big square */
+      content: '';
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #2563eb 100%);
+      box-shadow: 0 2px 6px rgba(2,6,23,0.35);
+      flex:0 0 14px;
+      transform: translateY(0);
     }
     .expertise-item:hover{
-      box-shadow: 0 6px 32px #38bdf855;
-      border-left: 5px solid #2563eb;
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(2,6,23,0.6);
+      border-color: rgba(56,189,248,0.14);
+      background: linear-gradient(180deg, rgba(18,30,50,0.95), rgba(12,18,36,0.95));
     }
     @media(max-width: 900px) {
       .expertise{
@@ -503,13 +520,26 @@
       gap:15px;
       margin-top:25px;
     }
-
     .interests span{
-      background:#38bdf8;
-      color:#0b1120;
-      padding:12px 18px;
+      /* Polished pill style: subtle gradient, soft border and shadow */
+      background: linear-gradient(180deg, rgba(56,189,248,0.08), rgba(37,99,235,0.06));
+      color: #cfeeff;
+      padding:8px 14px;
       border-radius:999px;
-      font-weight:bold;
+      font-weight:600;
+      border: 1px solid rgba(56,189,248,0.12);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.45), inset 0 -2px 0 rgba(255,255,255,0.02);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:36px;
+    }
+    .interests span:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(2,6,23,0.55);
+      background: linear-gradient(180deg, rgba(56,189,248,0.12), rgba(37,99,235,0.10));
+      color: #ffffff;
     }
 
     /* FOOTER */
@@ -614,7 +644,7 @@
           color:#2563eb;
         }
         body.light-mode .section-title {
-          color:#22223b;
+          color:#ffffff !important;
         }
         body.light-mode .stack span {
           background:#e0e7ef;
@@ -1016,7 +1046,7 @@
 
   <div class="container">
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero main-section">
       <div class="hero-content">
         <img src="assets/profile.jpg" alt="Profile photo of Gonzalo Zurita" class="profile-pic" />
         <h1>Gonzalo Zurita</h1>
