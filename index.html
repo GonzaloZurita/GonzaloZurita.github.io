@@ -120,13 +120,13 @@
       background: linear-gradient(100deg, #0b1120 80%, #1e293b 100%);
       border-radius: 18px;
       box-shadow: 0 4px 32px 0 #38bdf822;
-      padding: 48px 32px 32px 32px;
-      margin-bottom: 48px;
+      padding: 36px 24px 24px 24px;
+      margin-bottom: 28px;
       position: relative;
     }
     @media(max-width: 900px) {
       .main-section {
-        padding: 32px 8px 24px 8px;
+        padding: 20px 8px 16px 8px;
       }
     }
 
@@ -169,7 +169,7 @@
     }
 
     section{
-      padding:70px 0 50px 0;
+      padding:48px 0 28px 0;
       border-bottom:none;
       background:linear-gradient(90deg,#0b1120 80%,#111c34 100%);
       box-shadow:0 2px 16px 0 #00000011;
@@ -178,8 +178,8 @@
     }
     .section-divider {
       width: 100%;
-      height: 28px;
-      margin: -10px 0 40px 0;
+      height: 20px;
+      margin: -6px 0 28px 0;
       background: radial-gradient(ellipse at center, #38bdf822 0%, #0b112000 80%);
       filter: blur(2px);
       border: none;
@@ -542,6 +542,46 @@
       color: #ffffff;
     }
 
+    /* RECOMMENDATIONS (carousel) */
+    .recommendations-wrapper{
+      position:relative;
+      overflow:hidden;
+      min-height:120px;
+    }
+    .rec-card{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:16px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(11,17,32,0.95), rgba(16,24,40,0.95));
+      border:1px solid rgba(30,41,59,0.6);
+      box-shadow: 0 6px 20px rgba(2,6,23,0.55);
+      color:#cfeeff;
+      position:absolute;
+      left:0; right:0; top:0;
+      opacity:0;
+      transform: translateX(18px);
+      transition: opacity 0.36s ease, transform 0.36s ease;
+      z-index: 1;
+      pointer-events: none; /* prevent inactive cards from blocking clicks */
+    }
+    .rec-card.active{ position:relative; opacity:1; transform: translateX(0); z-index:2; pointer-events: auto; }
+    .rec-pic{ width:56px; height:56px; border-radius:50%; object-fit:cover; flex:0 0 56px; border:2px solid rgba(56,189,248,0.12); }
+    .rec-name{ font-weight:800; color:#ffffff; }
+    .rec-name a{ color:inherit; text-decoration:none; }
+    .rec-name a:hover{ color:#38bdf8; text-decoration:underline; }
+    .rec-title{ color:#a5b4fc; font-size:0.95rem; margin-bottom:8px; }
+    .rec-meta{ color:#94a3b8; font-size:0.9rem; margin-bottom:8px; }
+    .rec-message{ margin:0; color:#cbd5e1; line-height:1.45; font-style:italic; }
+    .rec-quote{ position:relative; padding:6px 12px 6px 36px; font-style:italic; }
+    .rec-quote::before{ content: "\201C"; position:absolute; left:8px; top:0; font-size:32px; color:#38bdf8; line-height:1; }
+    .rec-quote::after{ content: "\201D"; position:absolute; right:8px; bottom:2px; font-size:28px; color:#38bdf8; line-height:1; }
+    .rec-dots{ display:flex; gap:8px; justify-content:center; margin-top:12px; position:relative; z-index:4; }
+    .rec-dot{ width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.12); cursor:pointer; border:1px solid rgba(255,255,255,0.02); }
+    .rec-dot.active{ background:#38bdf8; box-shadow:0 2px 6px rgba(56,189,248,0.25); }
+    @media(max-width:900px){ .rec-card{ padding:12px; gap:10px; } .rec-pic{ width:48px; height:48px; flex:0 0 48px; } }
+
     /* FOOTER */
 
     footer{
@@ -896,6 +936,7 @@
     <a href="#experience">Experience</a>
     <a href="#technical-skills">Technical Skills</a>
     <a href="#professional-development">Professional Development</a>
+    <a href="#recommendations">Recommendations</a>
     <a href="#education">Education</a>
     <a href="#contact-form-section">Contact</a>
     <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
@@ -1041,6 +1082,89 @@
         setTimeout(restore, 3000);
       });
     })();
+
+    /* Recommendations carousel script (initialize after DOM ready) */
+    document.addEventListener('DOMContentLoaded', function(){
+      const container = document.getElementById('recommendationsList');
+      if(!container) return;
+      const cards = container.querySelectorAll('.rec-card');
+      const dots = container.querySelectorAll('.rec-dot');
+      if(!cards.length) return;
+
+      let current = 0;
+      const interval = 20000; // 20 seconds between cards
+      let timer = null;
+
+      function show(index){
+        cards.forEach((c,i)=> c.classList.toggle('active', i===index));
+        dots.forEach((d,i)=> d.classList.toggle('active', i===index));
+        current = index;
+      }
+
+      function scheduleNext(){
+        // use timeout-based scheduling to avoid overlapping intervals
+        if(timer){ clearTimeout(timer); timer = null; }
+        timer = setTimeout(() => {
+          const nextIndex = (current + 1) % cards.length;
+          show(nextIndex);
+          scheduleNext();
+        }, interval);
+      }
+
+      function start(){ if(!timer) scheduleNext(); }
+      function stop(){ if(timer){ clearTimeout(timer); timer = null; } }
+      function reset(){ stop(); scheduleNext(); }
+
+      if(dots && dots.length){
+        dots.forEach(d => d.addEventListener('click', function(){ const idx = Number(this.getAttribute('data-dot')); if(!Number.isNaN(idx)) { show(idx); reset(); } }));
+      }
+
+      container.addEventListener('mouseenter', stop);
+      container.addEventListener('mouseleave', start);
+
+      show(0);
+      start();
+    });
+    // Fallback delegation for the Show full skills button in case earlier listeners didn't bind
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest && e.target.closest('#showMoreBtn');
+      if(!btn) return;
+      const full = document.getElementById('fullSkills');
+      if(!full) return;
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if(expanded){
+        full.style.display = 'none';
+        btn.textContent = 'Show full skills';
+        btn.setAttribute('aria-expanded','false');
+        requestAnimationFrame(() => { window.scrollTo(0, prevY); });
+      } else {
+        full.style.display = 'block';
+        btn.textContent = 'Show less';
+        btn.setAttribute('aria-expanded','true');
+        requestAnimationFrame(() => { window.scrollTo(0, prevY); });
+      }
+    });
+    // Also attach a resilient direct handler once DOM is ready to ensure toggling works
+    document.addEventListener('DOMContentLoaded', function(){
+      const btn = document.getElementById('showMoreBtn');
+      const full = document.getElementById('fullSkills');
+      if(!btn || !full) return;
+      // ensure button has type attribute
+      btn.type = btn.type || 'button';
+      const handler = function(ev){
+        ev.preventDefault();
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        if(expanded){ full.style.display = 'none'; btn.textContent = 'Show full skills'; btn.setAttribute('aria-expanded','false'); }
+        else { full.style.display = 'block'; btn.textContent = 'Show less'; btn.setAttribute('aria-expanded','true'); }
+        requestAnimationFrame(() => { window.scrollTo(0, prevY); });
+      };
+      // remove previous duplicate listeners by cloning node (safe cleanup)
+      const clean = btn.cloneNode(true);
+      btn.parentNode.replaceChild(clean, btn);
+      clean.addEventListener('click', handler);
+    });
   </script>
 
 
@@ -1208,87 +1332,86 @@
       </div>
 
       <div class="show-more-wrap">
-        <button class="show-more-btn" id="showMoreBtn" aria-expanded="false">Show full skills</button>
+        <button type="button" class="show-more-btn" id="showMoreBtn" aria-expanded="false">Show full skills</button>
       </div>
 
       <div id="fullSkills" style="display:none">
-      <div class="grouped-skills">
-        <div class="expertise-category">
-          <div class="expertise-category-title">Automation</div>
-          <div class="mini-skill-cards">
-            <span class="mini-skill-card">ETL Validation</span>
-            <span class="mini-skill-card">Data Quality Testing</span>
-            <span class="mini-skill-card">AI-assisted Testing</span>
-            <span class="mini-skill-card">Automation-oriented QA Processes</span>
-            <span class="mini-skill-card">Backend & API Testing</span>
-            <span class="mini-skill-card">AI Workflows</span>
-            <span class="mini-skill-card">Integration Testing</span>
+        <div class="grouped-skills">
+          <div class="expertise-category">
+            <div class="expertise-category-title">Automation</div>
+            <div class="mini-skill-cards">
+              <span class="mini-skill-card">ETL Validation</span>
+              <span class="mini-skill-card">Data Quality Testing</span>
+              <span class="mini-skill-card">AI-assisted Testing</span>
+              <span class="mini-skill-card">Automation-oriented QA Processes</span>
+              <span class="mini-skill-card">Backend & API Testing</span>
+              <span class="mini-skill-card">AI Workflows</span>
+              <span class="mini-skill-card">Integration Testing</span>
+            </div>
           </div>
-        </div>
-        <div class="expertise-category">
-          <div class="expertise-category-title">Languages</div>
-          <div class="mini-skill-cards">
-            <span class="mini-skill-card">Python</span>
-            <span class="mini-skill-card">SQL</span>
-            <span class="mini-skill-card">PL/SQL</span>
-            <span class="mini-skill-card">JavaScript (Basic)</span>
-            <span class="mini-skill-card">C++ (Basic)</span>
+
+          <div class="expertise-category">
+            <div class="expertise-category-title">Languages</div>
+            <div class="mini-skill-cards">
+              <span class="mini-skill-card">Python</span>
+              <span class="mini-skill-card">SQL</span>
+              <span class="mini-skill-card">PL/SQL</span>
+              <span class="mini-skill-card">JavaScript (Basic)</span>
+              <span class="mini-skill-card">C++ (Basic)</span>
+            </div>
           </div>
-        </div>
-        <div class="expertise-category">
-          <div class="expertise-category-title">Tools</div>
-          <div class="mini-skill-cards">
-            <span class="mini-skill-card">Playwright</span>
-            <span class="mini-skill-card">Cypress</span>
-            <span class="mini-skill-card">Postman</span>
-            <span class="mini-skill-card">Git</span>
-            <span class="mini-skill-card">CI/CD</span>
-            <span class="mini-skill-card">Test Automation Frameworks</span>
-            <span class="mini-skill-card">SQL Server</span>
-            <span class="mini-skill-card">JIRA</span>
-            <span class="mini-skill-card">Azure DevOps</span>
-            <span class="mini-skill-card">Xray</span>
-            <span class="mini-skill-card">Zephyr</span>
-            <span class="mini-skill-card">BrowserStack</span>
-            <span class="mini-skill-card">Selenium (Basic)</span>
+
+          <div class="expertise-category">
+            <div class="expertise-category-title">Tools</div>
+            <div class="mini-skill-cards">
+              <span class="mini-skill-card">Playwright</span>
+              <span class="mini-skill-card">Cypress</span>
+              <span class="mini-skill-card">Postman</span>
+              <span class="mini-skill-card">Git</span>
+              <span class="mini-skill-card">CI/CD</span>
+              <span class="mini-skill-card">SQL Server</span>
+              <span class="mini-skill-card">JIRA</span>
+              <span class="mini-skill-card">Azure DevOps</span>
+              <span class="mini-skill-card">BrowserStack</span>
+            </div>
           </div>
-        </div>
-        <div class="expertise-category">
-          <div class="expertise-category-title">Methodologies</div>
-          <div class="mini-skill-cards">
-            <span class="mini-skill-card">Agile QA Collaboration</span>
-            <span class="mini-skill-card">Enterprise QA Operations</span>
-            <span class="mini-skill-card">Intelligent Agent-based QA Workflows</span>
-            <span class="mini-skill-card">SCRUM</span>
-            <span class="mini-skill-card">SAFe / Kanban</span>
-            <span class="mini-skill-card">Atlassian Workflows</span>
+
+          <div class="expertise-category">
+            <div class="expertise-category-title">Methodologies</div>
+            <div class="mini-skill-cards">
+              <span class="mini-skill-card">Agile QA Collaboration</span>
+              <span class="mini-skill-card">Enterprise QA Operations</span>
+              <span class="mini-skill-card">Agent-based QA Workflows</span>
+              <span class="mini-skill-card">SCRUM</span>
+              <span class="mini-skill-card">SAFe / Kanban</span>
+              <span class="mini-skill-card">Atlassian Workflows</span>
+            </div>
           </div>
-        </div>
-        <div class="expertise-category wide">
-          <div class="expertise-category-title">QA Skills</div>
-          <div class="mini-skill-cards">
-            <span class="mini-skill-card">Manual Testing</span>
-            <span class="mini-skill-card">Test Case Creation</span>
-            <span class="mini-skill-card">Bug Documentation</span>
-            <span class="mini-skill-card">Requirements Validation</span>
-            <span class="mini-skill-card">Software Quality Control</span>
-            <span class="mini-skill-card">Test Execution</span>
-            <span class="mini-skill-card">Test Results Analysis</span>
-            <span class="mini-skill-card">Regression Testing</span>
-            <span class="mini-skill-card">Functional Testing</span>
-            <span class="mini-skill-card">Defect Management</span>
-            <span class="mini-skill-card">User Acceptance Testing</span>
-            <span class="mini-skill-card">Exploratory Testing</span>
-            <span class="mini-skill-card">API Testing</span>
-            <span class="mini-skill-card">Frontend Testing</span>
-            <span class="mini-skill-card">Backend Testing</span>
-            <span class="mini-skill-card">Attention to Detail</span>
-            <span class="mini-skill-card">Continuous Improvement</span>
+
+          <div class="expertise-category wide">
+            <div class="expertise-category-title">QA Skills</div>
+            <div class="mini-skill-cards">
+              <span class="mini-skill-card">Manual Testing</span>
+              <span class="mini-skill-card">Test Case Creation</span>
+              <span class="mini-skill-card">Bug Documentation</span>
+              <span class="mini-skill-card">Requirements Validation</span>
+              <span class="mini-skill-card">Software Quality Control</span>
+              <span class="mini-skill-card">Test Execution</span>
+              <span class="mini-skill-card">Test Results Analysis</span>
+              <span class="mini-skill-card">Regression Testing</span>
+              <span class="mini-skill-card">Functional Testing</span>
+              <span class="mini-skill-card">Defect Management</span>
+              <span class="mini-skill-card">User Acceptance Testing</span>
+              <span class="mini-skill-card">Exploratory Testing</span>
+              <span class="mini-skill-card">API Testing</span>
+              <span class="mini-skill-card">Frontend Testing</span>
+              <span class="mini-skill-card">Backend Testing</span>
+              <span class="mini-skill-card">Attention to Detail</span>
+              <span class="mini-skill-card">Continuous Improvement</span>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-      
     </section>
     <div class="section-divider"></div>
 
@@ -1320,6 +1443,68 @@
         <span>ETL Validation</span>
         <span>Backend QA</span>
         <span>Automation Engineering</span>
+      </div>
+    </section>
+    <div class="section-divider"></div>
+    <!-- EDUCATION -->
+    
+    <!-- RECOMMENDATIONS -->
+    <section id="recommendations" class="main-section">
+      <h3 class="section-title">Recommendations</h3>
+      <p style="color:#8faadc;font-size:0.98rem;margin-top:-8px;margin-bottom:18px;">What Colleagues Say</p>
+      <div id="recommendationsList">
+        <div class="recommendations-wrapper">
+          <div class="rec-card active" data-index="0">
+            <img class="rec-pic" src="assets/recommendations/Sayani_fouzdar.jpg" alt="Recommender photo" />
+            <div>
+              <div class="rec-name"><a href="https://www.linkedin.com/in/sayani-fouzdar-a40a82145/" target="_blank" rel="noopener">Sayani Fouzdar</a></div>
+              <div class="rec-title">Principal QA Engineer, Ingram Micro</div>
+              <div class="rec-meta">Direct manager · Dec 5, 2025</div>
+              <blockquote class="rec-message rec-quote">
+                <p>I have had the pleasure of working with Gonzalo and I can confidently recommend him as a highly dedicated and reliable professional. His strong technical understanding, excellent QA skills and enthusiasm for automation consistently contributes to high-quality outcomes.</p>
+
+                <p>Gonzalo approaches every task with professionalism, attention to details and a commitment to continuous improvement. He is also a friendly, collaborative team member who communicates effectively and supports those around him. I would highly recommend Gonzalo for any position requiring strong QA expertise and a dependable, team-oriented mindset.</p>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="rec-card" data-index="1">
+            <img class="rec-pic" src="assets/recommendations/josu_pastor.jpg" alt="Recommender photo" />
+            <div>
+              <div class="rec-name"><a href="https://www.linkedin.com/in/josu-pastor-321131323/" target="_blank" rel="noopener">Josu Pastor</a></div>
+              <div class="rec-title">Senior QA Automation Engineer | API & CI/CD Specialist</div>
+              <div class="rec-meta">Worked with Gonzalo · Nov 30, 2025</div>
+              <blockquote class="rec-message rec-quote">
+                <p>Working with Gonzalo has been a genuine pleasure. From day one, he brought a great attitude toward teamwork and problem-solving, consistently showing strong attention to detail and excellent people skills. No matter the challenge, he always found a way to keep morale high with a smile or a laugh.</p>
+
+                <p>What impressed me most was how, as a junior, he confidently took on a task that would’ve challenged even our senior QAs. His maturity, thoroughness, and willingness to dive deep into the details were evident from the start.</p>
+
+                <p>His honesty and empathy made him an outstanding QA and a valuable member of the team. Gonzalo genuinely raises the quality of whatever he works on. I would be happy to work with him again in the future.</p>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="rec-card" data-index="2">
+            <img class="rec-pic" src="assets/recommendations/anton_tomashchuck.jpg" alt="Recommender photo" />
+            <div>
+              <div class="rec-name"><a href="https://www.linkedin.com/in/4n7on/" target="_blank" rel="noopener">Anton Tomashchuk</a></div>
+              <div class="rec-title">QA Engineer, Ingram Micro</div>
+              <div class="rec-meta">Worked with Gonzalo · Nov 28, 2025</div>
+              <blockquote class="rec-message rec-quote">
+                <p>I was truly fortunate to work with you on the same team, and I can say with full confidence that Gonzalo is one of the most reliable and detail-oriented professionals I have ever worked with. He is someone you can count on in the most challenging situations, always ensuring that every issue is thoroughly understood and resolved to the highest standard.</p>
+
+                <p>Gonzalo consistently digs into even the smallest details and maintains clear, comprehensive documentation, making it easy for the rest of the team to navigate complex topics he has already explored. He is constantly striving for improvement, growth, and fairness.</p>
+
+                <p>Working with him is effortless - he is responsible, proactive, intelligent, and a genuinely collaborative team player!</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+        <div class="rec-dots" role="tablist" aria-label="Recommendation navigation">
+          <button class="rec-dot active" data-dot="0" aria-label="Show recommendation 1"></button>
+          <button class="rec-dot" data-dot="1" aria-label="Show recommendation 2"></button>
+          <button class="rec-dot" data-dot="2" aria-label="Show recommendation 3"></button>
+        </div>
       </div>
     </section>
     <div class="section-divider"></div>
