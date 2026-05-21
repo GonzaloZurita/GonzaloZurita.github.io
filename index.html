@@ -548,6 +548,11 @@
       overflow:hidden;
       min-height:120px;
     }
+    .rec-track{
+      display:flex;
+      transition: transform 0.45s cubic-bezier(.22,.9,.28,1);
+      will-change: transform;
+    }
     .rec-card{
       display:flex;
       gap:12px;
@@ -558,15 +563,15 @@
       border:1px solid rgba(30,41,59,0.6);
       box-shadow: 0 6px 20px rgba(2,6,23,0.55);
       color:#cfeeff;
-      position:absolute;
-      left:0; right:0; top:0;
-      opacity:0;
-      transform: translateX(18px);
-      transition: opacity 0.36s ease, transform 0.36s ease;
+      flex: 0 0 100%;
+      box-sizing: border-box;
+      opacity:1;
+      transform: none;
+      transition: transform 0.36s ease;
       z-index: 1;
-      pointer-events: none; /* prevent inactive cards from blocking clicks */
+      pointer-events: auto;
     }
-    .rec-card.active{ position:relative; opacity:1; transform: translateX(0); z-index:2; pointer-events: auto; }
+    .rec-card.active{ z-index:2; }
     .rec-pic{ width:56px; height:56px; border-radius:50%; object-fit:cover; flex:0 0 56px; border:2px solid rgba(56,189,248,0.12); }
     .rec-name{ font-weight:800; color:#ffffff; }
     .rec-name a{ color:inherit; text-decoration:none; }
@@ -580,6 +585,14 @@
     .rec-dots{ display:flex; gap:8px; justify-content:center; margin-top:12px; position:relative; z-index:4; }
     .rec-dot{ width:10px; height:10px; border-radius:50%; background: rgba(255,255,255,0.12); cursor:pointer; border:1px solid rgba(255,255,255,0.02); }
     .rec-dot.active{ background:#38bdf8; box-shadow:0 2px 6px rgba(56,189,248,0.25); }
+    .rec-nav{
+      position:absolute;
+      top:50%; transform:translateY(-50%);
+      width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+      background:rgba(11,17,32,0.7); color:#38bdf8; border:1px solid rgba(255,255,255,0.04); cursor:pointer; z-index:5;
+    }
+    .rec-nav.prev{ left:8px; }
+    .rec-nav.next{ right:8px; }
     @media(max-width:900px){ .rec-card{ padding:12px; gap:10px; } .rec-pic{ width:48px; height:48px; flex:0 0 48px; } }
 
     /* FOOTER */
@@ -1193,42 +1206,91 @@
     document.addEventListener('DOMContentLoaded', function(){
       const container = document.getElementById('recommendationsList');
       if(!container) return;
-      const cards = container.querySelectorAll('.rec-card');
+      const track = container.querySelector('.rec-track');
+      const cards = track ? Array.from(track.children) : [];
       const dots = container.querySelectorAll('.rec-dot');
+      const prevBtn = container.querySelector('.rec-nav.prev');
+      const nextBtn = container.querySelector('.rec-nav.next');
       if(!cards.length) return;
 
       let current = 0;
       const interval = 20000; // 20 seconds between cards
       let timer = null;
+      let isDragging = false;
+      let startX = 0;
+      let deltaX = 0;
 
-      function show(index){
+      function setPosition(index, animate = true){
+        const w = container.clientWidth || track.clientWidth || 0;
+        const x = -Math.round(index * w);
+        if(!animate) track.style.transition = 'none';
+        else track.style.transition = '';
+        track.style.transform = `translateX(${x}px)`;
+        // toggle active class for semantics
         cards.forEach((c,i)=> c.classList.toggle('active', i===index));
         dots.forEach((d,i)=> d.classList.toggle('active', i===index));
         current = index;
       }
 
-      function scheduleNext(){
-        // use timeout-based scheduling to avoid overlapping intervals
-        if(timer){ clearTimeout(timer); timer = null; }
-        timer = setTimeout(() => {
-          const nextIndex = (current + 1) % cards.length;
-          show(nextIndex);
-          scheduleNext();
-        }, interval);
+      function show(index){
+        const clamped = ((index % cards.length) + cards.length) % cards.length;
+        setPosition(clamped, true);
       }
 
+      function scheduleNext(){
+        if(timer){ clearTimeout(timer); timer = null; }
+        timer = setTimeout(() => { show(current + 1); scheduleNext(); }, interval);
+      }
       function start(){ if(!timer) scheduleNext(); }
       function stop(){ if(timer){ clearTimeout(timer); timer = null; } }
       function reset(){ stop(); scheduleNext(); }
 
+      // dots
       if(dots && dots.length){
         dots.forEach(d => d.addEventListener('click', function(){ const idx = Number(this.getAttribute('data-dot')); if(!Number.isNaN(idx)) { show(idx); reset(); } }));
       }
 
+      // arrows
+      if(prevBtn) prevBtn.addEventListener('click', (e)=>{ e.preventDefault(); show(current - 1); reset(); });
+      if(nextBtn) nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); show(current + 1); reset(); });
+
+      // pointer drag / touch support
+      track.style.touchAction = 'pan-y';
+      track.addEventListener('pointerdown', (e)=>{
+        isDragging = true;
+        startX = e.clientX;
+        deltaX = 0;
+        track.setPointerCapture(e.pointerId);
+        track.style.transition = 'none';
+        stop();
+      });
+      track.addEventListener('pointermove', (e)=>{
+        if(!isDragging) return;
+        deltaX = e.clientX - startX;
+        const w = container.clientWidth || track.clientWidth || 0;
+        const base = -current * w;
+        track.style.transform = `translateX(${base + deltaX}px)`;
+      });
+      function endDrag(){
+        if(!isDragging) return;
+        isDragging = false;
+        const threshold = Math.min(120, container.clientWidth * 0.18);
+        if(deltaX < -threshold) show(current + 1);
+        else if(deltaX > threshold) show(current - 1);
+        else show(current);
+        start();
+      }
+      track.addEventListener('pointerup', (e)=>{ track.releasePointerCapture && track.releasePointerCapture(e.pointerId); endDrag(); });
+      track.addEventListener('pointercancel', endDrag);
+      // pause autoplay when hovering
       container.addEventListener('mouseenter', stop);
       container.addEventListener('mouseleave', start);
 
-      show(0);
+      // resize handler to keep alignment
+      window.addEventListener('resize', ()=> setPosition(current, false));
+
+      // init
+      setPosition(0, false);
       start();
     });
     // Fallback delegation for the Show full skills button in case earlier listeners didn't bind
@@ -1560,6 +1622,8 @@
       <p style="color:#8faadc;font-size:0.98rem;margin-top:-8px;margin-bottom:18px;">What Colleagues Say</p>
       <div id="recommendationsList">
         <div class="recommendations-wrapper">
+          <button class="rec-nav prev" aria-label="Previous recommendation">‹</button>
+          <div class="rec-track">
           <div class="rec-card active" data-index="0">
             <img class="rec-pic" src="assets/recommendations/Sayani_fouzdar.jpg" alt="Recommender photo" />
             <div>
@@ -1605,6 +1669,8 @@
               </blockquote>
             </div>
           </div>
+          </div>
+          <button class="rec-nav next" aria-label="Next recommendation">›</button>
         </div>
         <div class="rec-dots" role="tablist" aria-label="Recommendation navigation">
           <button class="rec-dot active" data-dot="0" aria-label="Show recommendation 1"></button>
