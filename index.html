@@ -803,7 +803,7 @@
             line-height:1.25 !important;
           }
           /* hide UI chrome */
-          .sticky-header, .toggle-mode, .back-to-top, .download-pdf-btn, .show-more-wrap {
+          .sticky-header, .toggle-mode, .back-to-top, .download-pdf-btn, .schedule-btn, .show-more-wrap {
             display:none !important;
           }
           /* simplify section visuals */
@@ -840,8 +840,16 @@
           }
           .main-section { padding:8px 0 !important; }
           .section-title { font-size:1.1rem !important; margin-bottom:6px !important; }
-          .hero-description, .profile-pic { display:none !important; }
-          .profile-pic{ width:60px !important; height:60px !important; }
+          .hero-description { display:block !important; }
+          /* Ensure profile picture prints */
+          .profile-pic{ display:block !important; width:60px !important; height:60px !important; }
+          /* Hide interactive scheduling UI in print */
+          #schedule { display:none !important; }
+          /* Compact education cards for print: disable flex stretching and size to content */
+          .edu-grid { display:block !important; gap:8px !important; }
+          .edu-card { display:block !important; width:100% !important; padding:8px !important; min-height: 0 !important; height: auto !important; max-height: none !important; box-shadow:none !important; margin-bottom:10px !important; }
+          .edu-card .accent{ display:none !important; }
+          .edu-card .cert-badge{ position:static !important; float:right !important; margin-left:8px !important; }
           /* Compact experience: only show first 3 bullets */
           .experience-item ul li { display:none !important; }
           .experience-item ul li:nth-child(-n+3) { display:list-item !important; }
@@ -873,6 +881,25 @@
       color:#e2e8f0;
       text-decoration:underline;
     }
+    .sticky-header .schedule-btn{
+      background:#38bdf8;
+      color:#0b1120;
+      padding:7px 18px;
+      font-size:1rem;
+      border-radius:999px;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+      box-shadow:0 2px 8px #00000022;
+      margin-left:30px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-family:inherit;
+      line-height:1;
+    }
+    .sticky-header .schedule-btn:hover{ background:#2563eb; }
 
     /* --- Technical Skills Card Layout Fix --- */
     .grouped-skills {
@@ -1017,18 +1044,24 @@
       min-width:300px;
       max-width:100%;
       background:#ffffff;
+      position:relative;
       border-radius:12px;
-      padding:8px;
-      box-shadow:0 10px 36px rgba(2,6,23,0.36);
-      border:1px solid rgba(2,6,23,0.08);
+      padding:10px;
+      box-shadow:0 10px 36px rgba(2,6,23,0.12);
+      border:1px solid rgba(2,6,23,0.06);
       overflow:hidden;
     }
+    /* Dark-mode iframe rendering: milder filter to reduce inverted images/logos */
     .schedule-iframe-wrapper iframe.schedule-iframe{
+      position:relative;
+      z-index:1;
       width:100%;
       height:640px;
       border:0;
       display:block;
       background:#fff;
+      filter: none;
+      -webkit-filter: none;
     }
     /* side panel removed; schedule button and note intentionally omitted */
 
@@ -1053,7 +1086,7 @@
     <button id="headerNavPrev" class="header-nav prev" aria-label="Scroll header left">‹</button>
     <button id="headerNavNext" class="header-nav next" aria-label="Scroll header right">›</button>
     <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
-    <button class="download-pdf-btn" id="downloadPdfDarkBtn" style="margin-left:10px;padding:7px 14px;border-radius:999px;background:#0f172a;color:#38bdf8;border:1px solid #2563eb33;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF (Dark)</button>
+    <a href="#schedule" id="scheduleStickyLink" class="download-pdf-btn schedule-btn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Schedule a Meeting</a>
   </div>
 
   <script>
@@ -1113,6 +1146,17 @@
       next.addEventListener('click', function(e){ e.preventDefault(); setActive(active + 1); });
       function enterCompact(){ prev.style.display = 'flex'; next.style.display = 'flex'; setActive(active); }
       function leaveCompact(){ prev.style.display = 'none'; next.style.display = 'none'; navLinks.forEach(a=>a.classList.remove('active')); }
+        // Focus schedule iframe after clicking the sticky schedule link
+        const scheduleLink = document.getElementById('scheduleStickyLink');
+        if(scheduleLink){
+          scheduleLink.addEventListener('click', function(e){
+            // allow the existing smooth-scroll handler to run, then focus iframe
+            setTimeout(()=>{
+              const iframe = document.querySelector('#schedule iframe');
+              if(iframe) try{ iframe.focus(); }catch(err){}
+            }, 600);
+          });
+        }
       const toggle = document.getElementById('toggleModeBtn');
       function updateTogglePosition(){
         if(!toggle || !headerEl) return;
@@ -1196,33 +1240,10 @@
       });
     })();
 
-    // Download PDF (Dark) - keep dark look in print
-    (function(){
-      const downloadDark = document.getElementById('downloadPdfDarkBtn');
-      const full = document.getElementById('fullSkills');
-      if(!downloadDark) return;
-      downloadDark.addEventListener('click', function(){
-        let prevDisplay = null;
-        if(full){ prevDisplay = full.style.display; full.style.display = 'block'; }
-        // apply print dark mode class to both html and body for maximum specificity
-        document.documentElement.classList.add('print-dark-mode');
-        document.body.classList.add('print-dark-mode');
-        // make sure light-mode is off
-        document.body.classList.remove('light-mode');
-        // allow styles to settle
-        setTimeout(() => { window.print(); }, 250);
-        const restore = () => {
-          document.documentElement.classList.remove('print-dark-mode');
-          document.body.classList.remove('print-dark-mode');
-          if(full) full.style.display = prevDisplay;
-          window.removeEventListener('afterprint', restore);
-        };
-        window.addEventListener('afterprint', restore);
-        // fallback restore in case afterprint isn't fired
-        setTimeout(restore, 3000);
-      });
-    })();
+    
 
+
+    // overlay removed — using milder iframe filter instead
     /* Recommendations carousel script (initialize after DOM ready) */
     document.addEventListener('DOMContentLoaded', function(){
       const container = document.getElementById('recommendationsList');
