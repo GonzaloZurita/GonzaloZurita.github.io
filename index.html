@@ -817,7 +817,7 @@
           }
           .container { max-width:780px !important; padding:8px !important; }
           /* Hide contact form on print */
-          #contact-form-section { display:none !important; }
+          /* contact form removed from page */
           /* Dark-mode print variant */
           html.print-dark-mode, html.print-dark-mode body, body.print-dark-mode, body.print-dark-mode .container {
             background:#0b1120 !important;
@@ -1010,6 +1010,28 @@
     body.light-mode .edu-card .accent{ background:linear-gradient(180deg,#60a5fa,#38bdf8); }
     body.light-mode .edu-card .experience-meta{ color:#475569; }
 
+    /* Scheduling iframe wrapper for improved contrast */
+    .schedule-row { gap:18px; align-items:flex-start; display:flex; flex-wrap:wrap; }
+    .schedule-iframe-wrapper{
+      flex:1 1 100%;
+      min-width:300px;
+      max-width:100%;
+      background:#ffffff;
+      border-radius:12px;
+      padding:8px;
+      box-shadow:0 10px 36px rgba(2,6,23,0.36);
+      border:1px solid rgba(2,6,23,0.08);
+      overflow:hidden;
+    }
+    .schedule-iframe-wrapper iframe.schedule-iframe{
+      width:100%;
+      height:640px;
+      border:0;
+      display:block;
+      background:#fff;
+    }
+    /* side panel removed; schedule button and note intentionally omitted */
+
   </style>
 
 
@@ -1023,12 +1045,11 @@
   <button class="toggle-mode" id="toggleModeBtn" aria-label="Toggle light/dark mode">🌙</button>
 
   <div class="sticky-header">
-    <a href="#experience">Experience</a>
-    <a href="#technical-skills">Technical Skills</a>
-    <a href="#professional-development">Professional Development</a>
-    <a href="#recommendations">Recommendations</a>
-    <a href="#education">Education</a>
-    <a href="#contact-form-section">Contact</a>
+  <a href="#experience">Experience</a>
+  <a href="#technical-skills">Technical Skills</a>
+  <a href="#professional-development">Professional Development</a>
+  <a href="#recommendations">Recommendations</a>
+  <a href="#education">Education</a>
     <button id="headerNavPrev" class="header-nav prev" aria-label="Scroll header left">‹</button>
     <button id="headerNavNext" class="header-nav next" aria-label="Scroll header right">›</button>
     <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
@@ -1701,22 +1722,19 @@
     </section>
     <div class="section-divider"></div>
 
-    <!-- CONTACT FORM (bottom of container, centered) -->
-    <section id="contact-form-section" class="main-section">
-      <h3 class="section-title">Quick Contact Form</h3>
-      <form class="contact-form" name="contact" method="POST" data-netlify="true" autocomplete="on">
-        <input type="hidden" name="form-name" value="contact" />
-        <label for="cf-name">Name</label>
-        <input id="cf-name" type="text" name="name" placeholder="Your Name" required aria-label="Your Name" />
-        <label for="cf-email">Email</label>
-        <input id="cf-email" type="email" name="email" placeholder="your@email.com" required aria-label="Your Email" />
-        <label for="cf-message">Message</label>
-        <textarea id="cf-message" name="message" placeholder="Your Message" required rows="5" aria-label="Your Message"></textarea>
-        <button type="submit" class="contact-form-btn">Send Message</button>
-        <div class="contact-form-success" id="contactFormSuccess">Thank you! Your message has been sent.</div>
-      </form>
+    <!-- SCHEDULING -->
+    <section id="schedule" class="main-section">
+      <h3 class="section-title">Schedule a Meeting</h3>
+      <p style="color:#8faadc;font-size:0.98rem;margin-top:-8px;margin-bottom:12px;">See my availability and create a Google Calendar event (you can add Google Meet when saving).</p>
+      <div class="schedule-row">
+        <!-- Google Calendar Appointment Scheduling (full-width card) -->
+        <div class="schedule-iframe-wrapper">
+          <iframe class="schedule-iframe" src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2GyfIQ8MHZNDjl7a4GRhN0Kl9JNDy7Rv3CHdl1Dsb7g0IHonHHa2eH10VSNNhnQaibv5JlbuXR?gv=true" width="100%" height="640" frameborder="0" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <!-- end Google Calendar Appointment Scheduling -->
+      </div>
     </section>
-    <div class="section-divider"></div>
+    
   </div>
 
 </body>
