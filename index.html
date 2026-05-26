@@ -406,6 +406,23 @@
       box-shadow: 0 6px 32px #38bdf855;
       border-left: 5px solid #2563eb;
     }
+    /* Compact left-aligned timeline: gutter with vertical line, circular markers and date badges */
+    .timeline { --tl-line-left:48px; --tl-marker-top:40px; --tl-content-left:120px; --tl-connector-offset:6px; position: relative; padding-left: var(--tl-content-left); }
+    /* vertical timeline: top and height are set dynamically via JS to stop at first/last visible item */
+    .timeline::before{ content: ''; position: absolute; left: var(--tl-line-left); top: var(--tl-line-top,8px); width: 3px; height: var(--tl-line-height, calc(100% - 16px)); background: linear-gradient(180deg, rgba(56,189,248,0.22), rgba(37,99,235,0.12)); border-radius:3px; box-shadow:0 0 18px rgba(56,189,248,0.04) inset; z-index:0; }
+    .timeline .experience-item{ position: relative; margin-bottom: 28px; z-index:1; border-left: none; }
+    /* center markers & badges vertically relative to card top padding */
+    /* horizontal connector from timeline to card */
+    /* connector ends flush at the card's left inner edge (left:0) */
+    /* CSS connector disabled — JS renders pixel-perfect connectors instead */
+    .timeline .experience-item::before{ display: none; }
+    /* Pseudo-element badges disabled; JS will render .tl-badge elements for pixel-perfect alignment */
+    .timeline .experience-item::after{ display:none !important; }
+    @media(max-width:900px){ .timeline{ padding-left:12px; } .timeline::before{ display:none; } .timeline .experience-item::before{ display:none; } .timeline .experience-item::after{ position: static; display:block; margin-bottom:6px; background:transparent; border:none; color:#94a3b8; box-shadow:none; } }
+    @media(max-width:900px){ .timeline .tl-badge{ display:none; } }
+    /* JS-rendered connectors (used for pixel-perfect alignment) */
+    .timeline .tl-connector{ position:absolute; height:3px; left:0; top:0; background: linear-gradient(90deg, rgba(56,189,248,0.28), rgba(37,99,235,0.16)); border-radius:3px; box-shadow:0 0 18px rgba(56,189,248,0.06) inset; z-index:6; pointer-events:none; }
+    .timeline .tl-badge{ position:absolute; left: var(--tl-line-left); transform: translate(-50%, -50%); font-size:0.88rem; color:#d7f7ff; background: rgba(6,10,20,0.66); padding:6px 10px; border-radius:999px; border:1px solid rgba(56,189,248,0.18); box-shadow:0 4px 18px rgba(2,6,23,0.18); white-space:nowrap; z-index:8; pointer-events:auto; }
     /* Company logo + header layout for experience items */
     .experience-header{
       display:flex;
@@ -995,17 +1012,30 @@
       align-items: flex-start;
     }
     .expertise-category-title {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: #38bdf8;
-      margin-bottom: 14px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #9be7f7;
+      margin-bottom: 8px;
       letter-spacing: 0.01em;
+      position: relative;
+      display: inline-block;
+    }
+    .expertise-category-title::after{
+      content: '';
+      display: block;
+      width: 100%;
+      height: 3px;
+      border-radius: 3px;
+      background: linear-gradient(90deg,#2563eb 0%, #38bdf8 100%);
+      margin-top: 4px;
+      opacity: 0.95;
     }
     .mini-skill-cards {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-content: flex-start; /* pack wrapped rows to top to avoid vertical gaps */
+      margin-top: 12px; /* separate from category title */
     }
     .mini-skill-card {
       background: #0b1120;
@@ -1045,6 +1075,21 @@
         padding: 16px 8px 10px 8px;
       }
     }
+
+    /* Ensure grouped skills use a grid layout on larger screens to avoid overlap */
+    .grouped-skills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    @media (min-width: 1200px) {
+      .grouped-skills { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Small visual safety margins inside each expertise card to avoid cramped content */
+    .expertise-category { padding-bottom: 18px; }
+    .mini-skill-cards { gap: 12px; }
 
     /* Top Skills compact row */
     .top-skills {
@@ -1087,6 +1132,22 @@
     .show-more-btn:focus{ outline:2px solid rgba(56,189,248,0.14); outline-offset:3px }
 
     .show-more-wrap{ display:flex; justify-content:center; width:100%; margin-top:8px }
+
+    /* Space between the Show older experience button and the revealed cards */
+    #olderExperiences {
+      margin-top: 22px;
+    }
+    @media(max-width:900px){
+      #olderExperiences { margin-top: 14px; }
+    }
+
+    /* Space between the Show full skills button and the revealed skills */
+    #fullSkills {
+      margin-top: 22px;
+    }
+    @media(max-width:900px){
+      #fullSkills { margin-top: 14px; }
+    }
 
     /* Education & Certifications cards */
     .edu-grid{
@@ -1186,6 +1247,139 @@
   <script>
     // Smooth scroll with offset for sticky header
     const header = document.querySelector('.sticky-header');
+      // Timeline connector renderer: create pixel-perfect horizontal connectors
+      (function(){
+        function updateConnectors(){
+          const timeline = document.querySelector('.timeline');
+          if(!timeline) return;
+          // remove existing connectors and badges
+          timeline.querySelectorAll('.tl-connector, .tl-badge').forEach(n=>n.remove());
+          const vars = getComputedStyle(timeline);
+          const lineLeft = parseFloat(vars.getPropertyValue('--tl-line-left')) || 48;
+          const contentLeft = parseFloat(vars.getPropertyValue('--tl-content-left')) || 120;
+          const items = Array.from(timeline.querySelectorAll('.experience-item'));
+          const visibleCenters = [];
+          const badgeCenters = [];
+          const markerTopVar = parseFloat(vars.getPropertyValue('--tl-marker-top')) || 40;
+          // estimate badge half-height (font-size * 0.88 rem + vertical padding 6)
+          const rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const badgeHalf = Math.round((rootFs * 0.88 + 12) / 2);
+          const timelineRect = timeline.getBoundingClientRect();
+          items.forEach(item=>{
+            // skip hidden items
+            if(!(item.offsetParent !== null && item.offsetHeight>0)) return;
+            const itemRect = item.getBoundingClientRect();
+            // center relative to timeline
+            const center = Math.round(itemRect.top - timelineRect.top + (itemRect.height/2));
+            visibleCenters.push(center);
+            // badge center relative to timeline (markerTopVar pixels from item top)
+            const badgeCenter = Math.round(itemRect.top - timelineRect.top + markerTopVar);
+            badgeCenters.push(badgeCenter);
+            const left = Math.round(lineLeft);
+            // compute item's left offset relative to timeline
+            const itemLeft = Math.round(itemRect.left - timelineRect.left);
+            // width from vertical line to the item's left edge (leave small minimum so it's visible)
+            const width = Math.max(8, itemLeft - left);
+            // create horizontal connector
+            const div = document.createElement('div');
+            div.className = 'tl-connector';
+            div.style.top = (center) + 'px';
+            div.style.left = left + 'px';
+            div.style.width = width + 'px';
+            timeline.appendChild(div);
+            // create badge aligned to the vertical line (align to connector center)
+            const badge = document.createElement('div');
+            badge.className = 'tl-badge';
+            badge.textContent = item.getAttribute('data-date') || '';
+            // position badge center at the badge marker (aligned to the vertical timeline) and align left to the vertical line
+            badge.style.top = badgeCenter + 'px';
+            badge.style.left = left + 'px';
+            timeline.appendChild(badge);
+          });
+          // set vertical line to span from top of first badge to bottom of last badge
+          if(badgeCenters.length){
+            const firstBadgeCenter = badgeCenters[0];
+            const lastBadgeCenter = badgeCenters[badgeCenters.length-1];
+            const lineTop = Math.max(0, Math.round(firstBadgeCenter - badgeHalf - 6));
+            let lineBottom;
+            // if older experiences block is hidden, extend the line to the bottom of the timeline container
+            const olderBlockEl = document.getElementById('olderExperiences');
+            const olderHidden = olderBlockEl && getComputedStyle(olderBlockEl).display === 'none';
+            // also consider the last connector center (visibleCenters) so the vertical line reaches the horizontal connector
+            const lastConnectorCenter = (visibleCenters.length ? visibleCenters[visibleCenters.length-1] : null);
+            if(olderHidden){
+              const containerHeight = timeline.clientHeight || timeline.getBoundingClientRect().height;
+              lineBottom = Math.round(containerHeight - 12); // leave small padding at bottom
+            } else {
+              // prefer extending to whichever is lower: badge bottom or connector center (+ small buffer)
+              const connectorBottom = lastConnectorCenter !== null ? Math.round(lastConnectorCenter + 8) : 0;
+              lineBottom = Math.round(Math.max(lastBadgeCenter + badgeHalf + 6, connectorBottom));
+            }
+            const height = Math.max(2, lineBottom - lineTop);
+            timeline.style.setProperty('--tl-line-top', lineTop + 'px');
+            timeline.style.setProperty('--tl-line-height', height + 'px');
+          }
+        }
+        // expose for external calls (e.g., when content toggles open)
+        window.updateTimelineConnectors = updateConnectors;
+        window.addEventListener('load', updateConnectors);
+        window.addEventListener('DOMContentLoaded', updateConnectors);
+        window.addEventListener('resize', function(){ window.requestAnimationFrame(updateConnectors); });
+        // Watch for older experiences becoming visible and for images loading inside timeline
+        const olderBlock = document.getElementById('olderExperiences');
+        if(olderBlock){
+          const mo = new MutationObserver(() => { setTimeout(updateConnectors, 60); });
+          mo.observe(olderBlock, { attributes: true, childList: true, subtree: true });
+          // ensure images inside older block trigger update when they finish loading
+          olderBlock.querySelectorAll('img').forEach(img=>{
+            if(!img.complete) img.addEventListener('load', () => { setTimeout(updateConnectors, 40); });
+          });
+        }
+        // Also observe the main timeline container for dynamic additions/removals
+        const timelineEl = document.querySelector('.timeline');
+        if(timelineEl){
+          const moTimeline = new MutationObserver((mutationsList)=>{
+            let schedule = false;
+            for(const mut of mutationsList){
+              if(mut.type === 'childList'){
+                mut.addedNodes.forEach(node => {
+                  if(node && node.nodeType === 1){
+                    // if node is an <img>
+                    if(node.tagName === 'IMG'){
+                      if(!node.complete) node.addEventListener('load', () => { setTimeout(updateConnectors, 40); });
+                      schedule = true;
+                    } else {
+                      // attach listeners to any imgs inside the added subtree
+                      const imgs = node.querySelectorAll && node.querySelectorAll('img');
+                      if(imgs && imgs.length){
+                        imgs.forEach(img=>{ if(!img.complete) img.addEventListener('load', () => { setTimeout(updateConnectors, 40); }); });
+                        schedule = true;
+                      } else {
+                        // non-image node added — layout likely changed
+                        schedule = true;
+                      }
+                    }
+                  }
+                });
+                if(mut.removedNodes && mut.removedNodes.length) schedule = true;
+              } else if(mut.type === 'attributes'){
+                // re-run when an img src changes
+                if(mut.target && mut.target.tagName === 'IMG' && mut.attributeName === 'src'){
+                  const img = mut.target;
+                  if(!img.complete) img.addEventListener('load', () => { setTimeout(updateConnectors, 40); });
+                  schedule = true;
+                }
+              }
+            }
+            if(schedule) setTimeout(updateConnectors, 60);
+          });
+          moTimeline.observe(timelineEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+          // images inside timeline should trigger connector recalculation when they load
+          timelineEl.querySelectorAll('img').forEach(img=>{
+            if(!img.complete) img.addEventListener('load', () => { setTimeout(updateConnectors, 40); });
+          });
+        }
+      })();
     const headerHeight = header ? header.offsetHeight : 0;
     document.querySelectorAll('.sticky-header a[href^="#"]').forEach(link => {
       link.addEventListener('click', function(e) {
@@ -1276,13 +1470,13 @@
             btn.textContent = 'Show older experience';
             btn.setAttribute('aria-expanded','false');
             // allow layout to settle then restore scroll
-            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); if(window.updateTimelineConnectors) window.updateTimelineConnectors(); });
           } else {
             older.style.display = 'block';
             btn.textContent = 'Show less';
             btn.setAttribute('aria-expanded','true');
             // allow layout to settle then restore scroll
-            requestAnimationFrame(() => { window.scrollTo(0, prevY); });
+            requestAnimationFrame(() => { window.scrollTo(0, prevY); if(window.updateTimelineConnectors){ setTimeout(window.updateTimelineConnectors,50); } });
           }
         });
       }
@@ -1525,7 +1719,8 @@
     <!-- EXPERIENCE -->
     <section id="experience" class="experience-section main-section">
       <h3 class="section-title">Professional Experience</h3>
-      <div class="experience-item">
+      <div class="timeline" role="list">
+      <div class="experience-item" data-date="Jul 2024 — Present">
         <div class="experience-header">
           <img class="company-logo color white-bg" src="assets/logos/ingram-micro.svg" alt="Ingram Micro logo" loading="lazy" />
           <div>
@@ -1543,7 +1738,7 @@
           <li>Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency across releases.</li>
         </ul>
       </div>
-      <div class="experience-item">
+      <div class="experience-item" data-date="Aug 2022 — Feb 2024">
         <div class="experience-header">
           <img class="company-logo color" src="assets/logos/rootstrap.jpg" alt="Rootstrap logo" loading="lazy" />
           <div>
@@ -1559,7 +1754,7 @@
           <li>Supported production issue resolution, operational maintenance, and quality validation processes.</li>
         </ul>
       </div>
-      <div class="experience-item">
+      <div class="experience-item" data-date="Oct 2020 — Aug 2022">
         <div class="experience-header">
           <img class="company-logo" src="assets/logos/fligoo.jpg" alt="Fligoo logo" loading="lazy" />
           <div>
@@ -1581,7 +1776,7 @@
       </div>
 
       <div id="olderExperiences" style="display:none">
-        <div class="experience-item">
+        <div class="experience-item" data-date="Oct 2019 — Oct 2020">
           <div class="experience-header">
             <img class="company-logo" src="assets/logos/globant.jpeg" alt="Globant logo" loading="lazy" />
             <div>
@@ -1599,7 +1794,7 @@
           </ul>
         </div>
 
-        <div class="experience-item">
+        <div class="experience-item" data-date="Feb 2019 — Aug 2019">
           <div class="experience-header">
             <img class="company-logo color white-bg" src="assets/logos/claro.svg" alt="Claro logo" loading="lazy" />
             <div>
@@ -1614,6 +1809,7 @@
             <li>Assisted in test analysis, defect reporting and verification.</li>
           </ul>
         </div>
+      </div>
       </div>
     </section>
     <div class="section-divider"></div>
@@ -1636,6 +1832,7 @@
         <div class="skill-badge">Automation Testing</div>
         <div class="skill-badge">SAFe</div>
         <div class="skill-badge">SCRUM</div>
+        <div class="skill-badge">Mobile testing</div>
       </div>
 
       <div class="show-more-wrap">
