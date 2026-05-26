@@ -8,6 +8,9 @@
 
 
   <link rel="icon" href="assets/profile.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
         /* Ensure all main sections have the same width and centering as the hero */
@@ -131,6 +134,7 @@
     }
 
     @import url('https://media.licdn.com/dms/image/v2/D4D03AQFGvXn5gDK8vA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1708540072575?e=1781136000&v=beta&t=s6wFQYuva208CFJ3p6mtSnyzmyXnwYVR1ozCTB3ur6E');
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@600;700;800&display=swap');
 
     *{
       margin:0;
@@ -146,13 +150,17 @@
     body{
       background:#0b1120;
       color:#e2e8f0;
-      font-family:'Inter', Arial, Helvetica, sans-serif;
+      /* Use Roboto for crisper rendering on Windows + Chrome */
+      font-family: 'Roboto', 'Inter', Arial, Helvetica, sans-serif;
       line-height:1.7;
       transition:background 0.4s, color 0.4s;
       /* Subtle dot pattern background */
       background-image: radial-gradient(circle at 1px 1px, #38bdf81a 1.5px, transparent 0),
         radial-gradient(circle at 3px 3px, #2563eb11 1.5px, transparent 0);
       background-size: 28px 28px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     .container{
@@ -189,6 +197,9 @@
     h1,h2,h3,h4{
       color:white;
       font-family:'Montserrat', Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     p{
@@ -944,8 +955,15 @@
       border: 1.5px solid #2563eb44;
       border-radius: 8px;
       padding: 8px 16px;
-      font-size: 0.98rem;
-      font-weight: 500;
+      font-size: 1rem;
+      /* Use Roboto (system fallback) for consistent hinting on Windows + Chrome */
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      /* force better font rendering on some displays */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       box-shadow: 0 1px 6px #2563eb22;
       transition: box-shadow 0.2s, border-color 0.2s, color 0.2s;
       display: inline-flex;
