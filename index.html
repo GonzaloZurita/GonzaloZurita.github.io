@@ -38,6 +38,28 @@
       border-radius:18px;
       box-shadow:0 2px 16px #00000022;
     }
+
+    :root{
+      --accent-1: #2563eb; /* deep blue */
+      --accent-2: #38bdf8; /* cyan */
+      --card-gradient: linear-gradient(180deg,#071220 0%, #0b1f33 100%);
+      --cta-gradient: linear-gradient(180deg,var(--accent-1) 0%, var(--accent-2) 100%);
+      --cta-dark-gradient: var(--card-gradient);
+      /* CTA text color (editable) - options: soft white, muted cyan, pale blue */
+      --cta-text: #9be7f7; /* muted cyan (user choice) */
+      --cta-border: rgba(0,0,0,0.12);
+      --cta-shadow-1: 0 6px 18px rgba(2,6,23,0.20);
+      --cta-glow: 0 0 12px rgba(56,189,248,0.06);
+      --cta-hover-white: rgba(255,255,255,0.12); /* white glow on hover */
+    }
+    /* Apply a subtle cyan elevation to all native buttons by default (keeps card highlight feel) */
+    button, input[type="button"], input[type="submit"], .btn {
+      box-shadow: 0 6px 32px rgba(56,189,248,0.18);
+      border-color: rgba(56,189,248,0.12);
+      transition: box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .nav-left{ display:flex; gap:12px; align-items:center; }
+    .nav-right{ display:flex; gap:10px; align-items:center; margin-left:auto; }
     .contact-form input,
     .contact-form textarea {
       outline:none;
@@ -77,11 +99,12 @@
       cursor:pointer;
       margin-top:10px;
       transition:background 0.2s, color 0.2s;
-      box-shadow:0 2px 8px #38bdf822;
+      box-shadow:0 6px 32px rgba(56,189,248,0.26);
     }
     .contact-form-btn:hover {
       background:#2563eb;
       color:#fff;
+      box-shadow: 0 8px 22px rgba(2,6,23,0.18), 0 0 8px rgba(56,189,248,0.04), 0 0 0 3px rgba(56,189,248,0.06);
     }
     .contact-form-success {
       color:#38bdf8;
@@ -330,9 +353,10 @@
     }
 
     .card:hover{
-      transform:translateY(-7px) scale(1.03);
+      /* match experience-item hover: no movement, consistent shadow and accent */
+      transform: none;
       border-color:#38bdf8;
-      box-shadow:0 6px 24px #38bdf822;
+      box-shadow: 0 6px 32px #38bdf855;
     }
 
     .card h4{
@@ -485,10 +509,11 @@
       transform: translateY(0);
     }
     .expertise-item:hover{
-      transform: translateY(-6px);
-      box-shadow: 0 20px 48px rgba(2,6,23,0.6);
-      border-color: rgba(56,189,248,0.14);
-      background: linear-gradient(180deg, rgba(18,30,50,0.95), rgba(12,18,36,0.95));
+      /* apply experience-style highlight without movement */
+      transform: none;
+      box-shadow: 0 6px 32px #38bdf855;
+      border-color: rgba(56,189,248,0.18);
+      background: linear-gradient(180deg, rgba(18,30,50,0.98), rgba(12,18,36,0.98));
     }
     @media(max-width: 900px) {
       .expertise{
@@ -513,9 +538,10 @@
     }
 
     .project-card:hover{
-      transform:translateY(-7px) scale(1.03);
+      /* same non-moving highlight as experience items */
+      transform: none;
       border-color:#38bdf8;
-      box-shadow:0 6px 24px #38bdf822;
+      box-shadow: 0 6px 32px #38bdf855;
     }
 
     .project-card h4{
@@ -600,10 +626,26 @@
       position:absolute;
       top:50%; transform:translateY(-50%);
       width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-      background:rgba(11,17,32,0.7); color:#38bdf8; border:1px solid rgba(255,255,255,0.04); cursor:pointer; z-index:5;
+      background:rgba(11,17,32,0.7); color:#38bdf8; border:1px solid rgba(56,189,248,0.14); cursor:pointer; z-index:5;
+      box-shadow: 0 6px 32px rgba(56,189,248,0.24);
     }
+    .rec-nav:hover{ box-shadow: 0 8px 26px rgba(2,6,23,0.22), 0 0 8px rgba(56,189,248,0.04), 0 0 0 3px rgba(56,189,248,0.06); }
     .rec-nav.prev{ left:8px; }
     .rec-nav.next{ right:8px; }
+
+    /* Gradient radial ring for button hover: lighter near edge, subtler outward */
+    .sticky-header .download-pdf-btn,
+    .sticky-header .schedule-btn,
+    .show-more-btn,
+    .contact-form-btn,
+    .back-to-top,
+    .toggle-mode,
+    .header-nav,
+    .rec-nav {
+      position: relative;
+      overflow: visible;
+    }
+    /* removed pseudo-element radial hover ring in favor of box-shadow-only rings */
     @media(max-width:900px){ .rec-card{ padding:12px; gap:10px; } .rec-pic{ width:48px; height:48px; flex:0 0 48px; } }
 
     /* FOOTER */
@@ -645,17 +687,18 @@
       position:fixed;
       top:0; left:0; right:0;
       width:100vw;
-      background:rgba(11,17,32,0.85);
+      /* more transparent to reduce visual weight over content */
+      background:rgba(11,17,32,0.62);
       backdrop-filter: blur(8px);
-      z-index:100;
-      box-shadow:0 2px 12px #00000022;
-      padding:12px 0;
+      z-index:9999; /* keep header above all interactive elements */
+      box-shadow:0 1px 8px #00000014;
+      padding:10px 24px;
       display:flex;
-      justify-content:center;
+      justify-content:flex-start;
       align-items:center;
-      gap:40px;
+      gap:12px;
       font-family:'Montserrat', Arial, Helvetica, sans-serif;
-      transition:background 0.4s;
+      transition:background 0.4s, box-shadow 0.3s;
     }
 
     /* Reserve space for the fixed toggle and make header responsive */
@@ -696,12 +739,13 @@
           padding:8px 18px;
           font-size:1rem;
           cursor:pointer;
-          box-shadow:0 2px 8px #00000022;
+          box-shadow:0 6px 32px rgba(56,189,248,0.26);
           transition:background 0.3s, color 0.3s;
         }
         .toggle-mode:hover {
           background:#38bdf8;
           color:#0b1120;
+          box-shadow: 0 8px 22px rgba(2,6,23,0.18), 0 0 8px rgba(56,189,248,0.04), 0 0 0 3px rgba(56,189,248,0.06);
         }
 
         /* Hide download buttons in light mode as requested */
@@ -713,8 +757,8 @@
           position:absolute;
           top:50%;
           transform:translateY(-50%);
-          background:transparent;
-          border:1px solid rgba(255,255,255,0.06);
+          background: transparent;
+          border:1px solid rgba(56,189,248,0.14);
           color:#38bdf8;
           width:44px;
           height:44px;
@@ -724,8 +768,10 @@
           justify-content:center;
           font-size:1.3rem;
           z-index:220;
+          box-shadow: 0 6px 32px rgba(56,189,248,0.24);
         }
         .header-nav:active{ transform:translateY(-50%) scale(0.98); }
+        .header-nav:hover{ box-shadow: 0 8px 22px rgba(2,6,23,0.18), 0 0 8px rgba(56,189,248,0.04), 0 0 0 3px rgba(56,189,248,0.06); }
         @media(max-width:900px){
           .header-nav{ display:flex; }
           .header-nav.prev{ left:10px; }
@@ -741,8 +787,9 @@
           box-shadow:0 4px 32px 0 #00000011;
         }
         body.light-mode .sticky-header {
-          background:rgba(255,255,255,0.85);
+          background:rgba(255,255,255,0.72);
           color:#22223b;
+          box-shadow:0 1px 8px rgba(0,0,0,0.06);
         }
         body.light-mode .card,
         body.light-mode .project-card,
@@ -773,7 +820,7 @@
           color:#64748b;
         }
 
-        /* Back to Top Button */
+        /* Back to Top Button (reverted) */
         .back-to-top {
           position:fixed;
           bottom:32px;
@@ -789,16 +836,12 @@
           justify-content:center;
           font-size:2rem;
           cursor:pointer;
-          box-shadow:0 2px 12px #00000033;
+          box-shadow:0 6px 32px rgba(56,189,248,0.26);
           z-index:300;
-          opacity:0.85;
-          transition:background 0.3s, opacity 0.3s;
+          opacity:0.9;
+          transition:background 0.2s, opacity 0.2s, transform 0.12s;
         }
-        .back-to-top:hover {
-          background:#2563eb;
-          color:#fff;
-          opacity:1;
-        }
+        .back-to-top:hover { background:#2563eb; color:#fff; transform:translateY(-2px); opacity:1; box-shadow: 0 8px 26px rgba(2,6,23,0.22), 0 0 10px rgba(56,189,248,0.04), 0 0 0 3px rgba(56,189,248,0.06); }
 
         /* Print Styles */
         /* Print Styles (compact CV) */
@@ -880,46 +923,44 @@
           .expertise-category, .expertise-item { page-break-inside: avoid; }
           a { color:#222 !important; text-decoration:underline !important; }
         }
-    .sticky-header a{
-      color:#38bdf8;
-      text-decoration:none;
-      font-weight:bold;
-      margin:0 10px;
-      font-size:1.1rem;
-      transition:color 0.2s;
-    }
-    .sticky-header a:hover{
-      color:#e2e8f0;
-      text-decoration:underline;
-    }
+    .sticky-header a{ color:#8fd6ff; text-decoration:none !important; font-weight:600; margin:0 8px; padding:6px 8px; border-radius:6px; font-size:1rem; transition:background 0.12s, color 0.12s; }
+    .sticky-header a:hover{ background:rgba(255,255,255,0.03); color:#e2f4ff; text-decoration:none !important; }
+
+    /* CTAs: push to the right, keep compact and themed */
+    .sticky-header .download-pdf-btn{ margin-left:auto; margin-right:10px; }
+    .sticky-header .download-pdf-btn,
     .sticky-header .schedule-btn{
-      background:#38bdf8;
-      color:#0b1120;
-      padding:7px 18px;
-      font-size:1rem;
+      background: var(--cta-dark-gradient);
+      color: var(--cta-text);
+      padding:8px 16px;
+      font-size:0.95rem;
       border-radius:999px;
-      border:none;
-      font-weight:bold;
+      border:1px solid rgba(56,189,248,0.14);
+      font-weight:700;
       cursor:pointer;
-      box-shadow:0 2px 8px #00000022;
-      margin-left:30px;
+      /* experience-style highlight by default */
+      box-shadow: 0 6px 32px rgba(56,189,248,0.34);
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      text-decoration:none;
-      font-family:inherit;
+      text-decoration:none !important;
       line-height:1;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+      z-index:120;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.45);
     }
-    .sticky-header .schedule-btn:hover{ background:#2563eb; }
-
-    /* --- Technical Skills Card Layout Fix --- */
-    .grouped-skills {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 32px;
-      align-items: start;
-      margin-bottom: 10px;
+    .sticky-header .download-pdf-btn:hover,
+    .sticky-header .schedule-btn:hover{
+      transform:none;
+      /* intensify slightly on hover but keep same inner gradient */
+      background: var(--cta-dark-gradient);
+      color: var(--cta-text);
+      border-color: rgba(56,189,248,0.18);
+      box-shadow: 0 10px 40px rgba(56,189,248,0.28), 0 0 14px rgba(56,189,248,0.06), 0 0 0 3px rgba(56,189,248,0.06);
     }
+    .sticky-header .download-pdf-btn:focus, .sticky-header .schedule-btn:focus{ outline:2px solid rgba(56,189,248,0.14); outline-offset:3px }
     /* Allow specific category cards to span two columns for shorter vertical length */
     .grouped-skills .expertise-category.wide {
       grid-column: span 2;
@@ -965,15 +1006,18 @@
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
       box-shadow: 0 1px 6px #2563eb22;
-      transition: box-shadow 0.2s, border-color 0.2s, color 0.2s;
+      transition: box-shadow 0.18s ease, border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+      transform: none; /* ensure mini cards don't translate/scale */
       display: inline-flex;
       align-items: center;
     }
     .mini-skill-card:hover {
+      /* Highlight like experience items but without movement */
+      transform: none;
       border-color: #38bdf8;
       color: #fff;
-      background: #2563eb;
-      box-shadow: 0 4px 16px #38bdf822;
+      background: linear-gradient(180deg, rgba(18,30,50,0.95), rgba(12,18,36,0.95));
+      box-shadow: 0 12px 36px rgba(2,6,23,0.45);
     }
     @media(max-width: 900px) {
       .grouped-skills {
@@ -1005,20 +1049,25 @@
     }
     .show-more-btn{
       display:inline-block;
-      background: linear-gradient(90deg,#2563eb 0%, #38bdf8 100%);
-      color:#0b1120;
-      border:none;
+      background: var(--cta-dark-gradient);
+      color: var(--cta-text);
+      border:1px solid rgba(56,189,248,0.14);
       padding:12px 20px;
       border-radius:999px;
       cursor:pointer;
       margin:14px auto 0 auto;
       font-weight:700;
       font-size:1rem;
-      box-shadow: 0 8px 24px rgba(37,99,235,0.18), inset 0 -2px 0 rgba(0,0,0,0.06);
-      transition: transform 0.16s, box-shadow 0.16s, opacity 0.16s;
+      box-shadow: 0 6px 32px rgba(56,189,248,0.34);
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
       align-self:center;
+      z-index:120;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.45);
     }
-    .show-more-btn:hover{ transform:translateY(-3px); box-shadow: 0 12px 32px rgba(37,99,235,0.22); opacity:0.98 }
+    .show-more-btn:hover{ transform:translateY(-2px); box-shadow: 0 12px 36px rgba(2,6,23,0.26), 0 0 16px rgba(56,189,248,0.06), 0 0 0 3px rgba(56,189,248,0.06); opacity:0.98 }
+    .show-more-btn:focus{ outline:2px solid rgba(56,189,248,0.14); outline-offset:3px }
 
     .show-more-wrap{ display:flex; justify-content:center; width:100%; margin-top:8px }
 
@@ -1042,7 +1091,13 @@
       transition:transform 0.18s ease, box-shadow 0.18s ease;
       border:1px solid rgba(56,189,248,0.06);
     }
-    .edu-card:hover{ transform:translateY(-6px); box-shadow:0 12px 36px rgba(3,10,25,0.7); }
+    .edu-card:hover{
+      /* apply experience-style highlight without movement */
+      transform: none;
+      box-shadow: 0 6px 32px #38bdf855;
+      border-color: rgba(56,189,248,0.14);
+      background: linear-gradient(180deg, #06101e 0%, #07182a 100%);
+    }
     .edu-card .accent{ position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(180deg,#38bdf8,#2563eb); border-top-left-radius:14px; border-bottom-left-radius:14px; }
     .edu-card h4{ margin:0 0 6px 0; color:#e6f6ff; font-size:1.05rem; }
     .edu-card .experience-meta{ display:block; color:#9fb6d9; margin-bottom:8px; font-size:0.95rem; }
@@ -1096,15 +1151,19 @@
   <button class="toggle-mode" id="toggleModeBtn" aria-label="Toggle light/dark mode">🌙</button>
 
   <div class="sticky-header">
-  <a href="#experience">Experience</a>
-  <a href="#technical-skills">Technical Skills</a>
-  <a href="#professional-development">Professional Development</a>
-  <a href="#recommendations">Recommendations</a>
-  <a href="#education">Education</a>
+    <div class="nav-left">
+      <a href="#experience">Experience</a>
+      <a href="#technical-skills">Technical Skills</a>
+      <a href="#professional-development">Professional Development</a>
+      <a href="#recommendations">Recommendations</a>
+      <a href="#education">Education</a>
+    </div>
     <button id="headerNavPrev" class="header-nav prev" aria-label="Scroll header left">‹</button>
     <button id="headerNavNext" class="header-nav next" aria-label="Scroll header right">›</button>
-    <button class="download-pdf-btn" id="downloadPdfBtn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Download PDF</button>
-    <a href="#schedule" id="scheduleStickyLink" class="download-pdf-btn schedule-btn" style="margin-left:30px;padding:7px 18px;border-radius:999px;background:#38bdf8;color:#0b1120;border:none;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #00000022;">Schedule a Meeting</a>
+    <div class="nav-right">
+      <button class="download-pdf-btn" id="downloadPdfBtn">Download PDF</button>
+      <a href="#schedule" id="scheduleStickyLink" class="download-pdf-btn schedule-btn">Schedule a Meeting</a>
+    </div>
   </div>
 
   <script>
@@ -1674,6 +1733,7 @@
         <span>ETL Validation</span>
         <span>Backend QA</span>
         <span>Automation Engineering</span>
+        <span>Contract Testing</span>
       </div>
     </section>
     <div class="section-divider"></div>
