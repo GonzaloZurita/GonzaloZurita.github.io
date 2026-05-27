@@ -164,6 +164,7 @@
         align-items:center;
         justify-content:center;
         gap:8px;
+        font-size:1rem;
         padding:8px 14px;
         border-radius:999px;
         border:1px solid var(--cta-border);
@@ -180,7 +181,7 @@
         background: var(--cta-dark-gradient);
         color: var(--cta-text);
         padding:8px 16px;
-        font-size:0.95rem;
+        font-size:1rem;
         border-radius:999px;
         border:1px solid rgba(56,189,248,0.28);
         font-weight:700;
@@ -968,39 +969,22 @@
     .sticky-header a{ color:#8fd6ff; text-decoration:none !important; font-weight:600; margin:0 8px; padding:6px 8px; border-radius:6px; font-size:1rem; transition:background 0.12s, color 0.12s; }
     .sticky-header a:hover{ background:rgba(255,255,255,0.03); color:#e2f4ff; text-decoration:none !important; }
 
-    /* CTAs: push to the right, keep compact and themed */
+    /* CTAs: header-specific layout; visual styles come from .btn / .btn--* */
     .sticky-header .download-pdf-btn{ margin-left:auto; margin-right:10px; }
     .sticky-header .download-pdf-btn,
     .sticky-header .schedule-btn,
     .sticky-header .btn{
-      background: var(--cta-dark-gradient);
-      color: var(--cta-text);
-      padding:8px 16px;
-      font-size:0.95rem;
-      border-radius:999px;
-      border:1px solid rgba(56,189,248,0.28);
-      font-weight:700;
-      cursor:pointer;
-      box-shadow: 0 2px 8px rgba(2,6,23,0.12), 0 0 6px rgba(56,189,248,0.06);
-      -webkit-background-clip: padding-box;
-      background-clip: padding-box;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      text-decoration:none !important;
-      line-height:1;
-      transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+      margin:0 6px;
       z-index:120;
-      text-shadow: 0 1px 0 rgba(0,0,0,0.45);
     }
-    .sticky-header .download-pdf-btn:hover,
-    .sticky-header .schedule-btn:hover,
-    .sticky-header .btn:hover{
-      transform:none;
-      box-shadow: 0 10px 36px rgba(2,6,23,0.22), 0 0 18px rgba(56,189,248,0.10);
-      border-color: rgba(255,255,255,0.06);
+    /* Keep an explicit focus outline for header CTAs */
+    .sticky-header .download-pdf-btn:focus, .sticky-header .schedule-btn:focus, .sticky-header .btn:focus{
+      outline:2px solid rgba(56,189,248,0.14);
+      outline-offset:3px;
     }
-    .sticky-header .download-pdf-btn:focus, .sticky-header .schedule-btn:focus, .sticky-header .btn:focus{ outline:2px solid rgba(56,189,248,0.14); outline-offset:3px }
     /* Allow specific category cards to span two columns for shorter vertical length */
     .grouped-skills .expertise-category.wide {
       grid-column: span 2;
@@ -1939,7 +1923,7 @@
           <span>Agentic Test Automation</span>
         </div>
         <div class="contact" id="contact">
-          <a href="mailto:gonzalo.zurita92@gmail.com" title="Email">
+          <a href="mailto:gonzalo.zurita92@gmail.com" class="btn btn--ghost" title="Email">
             <svg width="18" height="18" fill="#38bdf8" viewBox="0 0 24 24" style="vertical-align:middle"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 6.01V6h16zM4 20V8.99l8 7 8-7V20H4z"/></svg>
             gonzalo.zurita92@gmail.com
           </a>
@@ -1951,11 +1935,11 @@
             <svg width="18" height="18" fill="#38bdf8" viewBox="0 0 24 24" style="vertical-align:middle"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             Barcelona, Spain
           </span>
-          <a href="https://www.linkedin.com/in/gonzu/" target="_blank" rel="noopener" title="LinkedIn">
+          <a href="https://www.linkedin.com/in/gonzu/" target="_blank" rel="noopener" class="btn btn--ghost" title="LinkedIn">
             <svg width="18" height="18" fill="#38bdf8" viewBox="0 0 24 24" style="vertical-align:middle"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.27c-.97 0-1.75-.79-1.75-1.76 0-.97.78-1.76 1.75-1.76s1.75.79 1.75 1.76c0 .97-.78 1.76-1.75 1.76zm13.5 11.27h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.89v1.36h.04c.4-.75 1.38-1.54 2.85-1.54 3.05 0 3.61 2.01 3.61 4.62v5.56z"/></svg>
             LinkedIn
           </a>
-          <a href="https://github.com/gonzalozurita" target="_blank" rel="noopener" title="GitHub">
+          <a href="https://github.com/gonzalozurita" target="_blank" rel="noopener" class="btn btn--ghost" title="GitHub">
             <svg width="18" height="18" fill="#38bdf8" viewBox="0 0 24 24" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.66-.22.66-.48 0-.24-.01-.87-.01-1.7-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 7.07c.85.004 1.71.115 2.51.337 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.16.58.67.48A10.003 10.003 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
             GitHub
           </a>
@@ -2020,7 +2004,7 @@
         </ul>
       </div>
       <div class="show-more-wrap">
-        <button class="show-more-btn btn btn--ghost" id="showOlderBtn" aria-expanded="false">Show older experience</button>
+        <button class="show-more-btn btn btn--primary" id="showOlderBtn" aria-expanded="false">Show older experience</button>
       </div>
 
       <div id="olderExperiences" style="display:none">
@@ -2084,7 +2068,7 @@
       </div>
 
       <div class="show-more-wrap">
-        <button type="button" class="show-more-btn btn btn--ghost" id="showMoreBtn" aria-expanded="false">Show full skills</button>
+        <button type="button" class="show-more-btn btn btn--primary" id="showMoreBtn" aria-expanded="false">Show full skills</button>
       </div>
 
       <div id="fullSkills" style="display:none">
@@ -2289,7 +2273,7 @@
     <!-- SCHEDULING -->
     <section id="schedule" class="main-section">
       <h3 class="section-title">Schedule a Meeting</h3>
-      <p style="color:#8faadc;font-size:0.98rem;margin-top:-8px;margin-bottom:12px;">See my availability and create a Google Calendar event (you can add Google Meet when saving).</p>
+      <p style="color:#8faadc;font-size:0.98rem;margin-top:-8px;margin-bottom:12px;">See my availability and create a Google Calendar event.</p>
       <div class="schedule-row">
         <!-- Google Calendar Appointment Scheduling (full-width card) -->
         <div class="schedule-iframe-wrapper">
