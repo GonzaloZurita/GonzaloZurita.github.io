@@ -639,15 +639,6 @@
     }
     .rec-nav.prev{ left:8px; }
     .rec-nav.next{ right:8px; }
-      color:#cfeeff;
-      flex: 0 0 100%;
-      box-sizing: border-box;
-      opacity:1;
-      transform: none;
-      transition: transform 0.36s ease;
-      z-index: 1;
-      pointer-events: auto;
-    }
     .rec-card.active{ z-index:2; }
     .rec-pic{ width:56px; height:56px; border-radius:50%; object-fit:cover; flex:0 0 56px; border:2px solid rgba(56,189,248,0.12); }
     .rec-name{ font-weight:800; color:#ffffff; }
@@ -746,14 +737,22 @@
       .sticky-header{
         justify-content:center;
         gap:12px;
-        padding-left:60px; /* space for left arrow */
-        padding-right:120px; /* space for right arrow + toggle */
+        padding-left:12px; /* reduced padding for centered layout */
+        padding-right:12px; /* reduced padding for centered layout */
         overflow:visible;
       }
+      /* Hide full nav links to prevent overlap with arrows */
+      .sticky-header .nav-left { display: none !important; }
+      /* Hide other right-side items, show only the two CTA buttons */
+      .sticky-header .nav-right > * { display: none !important; }
+      .sticky-header .nav-right .download-pdf-btn,
+      .sticky-header .nav-right .schedule-btn { display: inline-flex !important; }
       .sticky-header a{ display:none; white-space:nowrap; }
       .sticky-header a.active{ display:block; font-size:1.6rem; }
-      .sticky-header .download-pdf-btn{ display:none; }
       .toggle-mode{ right:18px; }
+      /* Ensure nav-right sits centered and its items don't push layout to the edge */
+      .sticky-header .nav-right { margin-left: 0 !important; justify-content: center; align-items: center; }
+      .sticky-header .nav-right .download-pdf-btn, .sticky-header .nav-right .schedule-btn { margin-left: 0 !important; margin-right: 8px !important; }
     }
         /* Fade-in Animations */
         @keyframes fadeIn {
@@ -811,9 +810,12 @@
         .header-nav:active{ transform:translateY(-50%) scale(0.98); }
         .header-nav:hover{ box-shadow: 0 10px 36px rgba(2,6,23,0.22), 0 0 18px rgba(56,189,248,0.10); border-color: rgba(255,255,255,0.06); }
         @media(max-width:900px){
-          .header-nav{ display:flex; }
-          .header-nav.prev{ left:10px; }
-          .header-nav.next{ right:62px; }
+          /* Hide header navigation arrows on small screens; we only show CTA buttons */
+          .header-nav{ display:none !important; }
+          .header-nav.prev{ left:auto; }
+          .header-nav.next{ right:auto; }
+          /* Also hide specific arrow buttons by id for robustness */
+          #headerNavPrev, #headerNavNext { display: none !important; }
         }
 
         body.light-mode {
