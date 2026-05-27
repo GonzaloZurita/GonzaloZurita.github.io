@@ -1058,10 +1058,17 @@
           @media print and (min-width: 1200px) {
             .edu-grid { grid-template-columns: repeat(2, 1fr) !important; }
           }
+          /* Reserve room in the title so the badge doesn't overlap text when printing */
+          .edu-card h4 { padding-right: 140px !important; }
+          @media print and (min-width: 1200px) {
+            .edu-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
            /* Print: keep all bullets for the latest (visible) experiences; hide bullets only for older experiences
              that are inside the #olderExperiences container to keep the print compact while preserving
              full detail for the most recent three entries. */
            #olderExperiences .experience-item ul li { display: none !important; }
+          /* Force everything after 'Interested In' to start on a new printed page */
+          #interests { page-break-after: always !important; break-after: page !important; -webkit-page-break-after: always !important; }
            /* Ensure main experience items are not broken across pages */
            .experience-item { page-break-inside: avoid; }
           /* Keep full skills visible but pack them tighter into more columns */
@@ -1715,6 +1722,7 @@
         // fallback restore in 3s
         setTimeout(restore, 3000);
       });
+
     })();
 
     
