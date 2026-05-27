@@ -455,7 +455,7 @@
       position: relative;
     }
     .experience-item {
-      background: #111827;
+      background: var(--overlay-gradient-1);
       border-left: 5px solid #38bdf8;
       border-radius: 12px;
       box-shadow: 0 2px 16px #38bdf822;
@@ -1112,6 +1112,13 @@
 
     .show-more-wrap{ display:flex; justify-content:center; width:100%; margin-top:8px }
 
+    /* Utility: hide elements via class instead of inline styles */
+    .is-hidden{ display:none !important; }
+
+    /* Hero industry badges layout moved from inline styles */
+    .hero-industry{ display:flex; gap:12px; margin-top:8px; margin-bottom:20px; }
+    .mini-skill-card--strong{ background: var(--accent-gradient-90); color:#0b1120; border:none; font-weight:700; }
+
     /* Space between the Show older experience button and the revealed cards */
     #olderExperiences {
       margin-top: 22px;
@@ -1616,13 +1623,13 @@
           // preserve current scroll position to avoid page jump when content height changes
           const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
           if(expanded){
-            full.style.display = 'none';
+            full.classList.add('is-hidden');
             btn.textContent = 'Show full skills';
             btn.setAttribute('aria-expanded','false');
             // restore previous scroll position after layout changes
             requestAnimationFrame(() => { window.scrollTo(0, prevY); });
           } else {
-            full.style.display = 'block';
+            full.classList.remove('is-hidden');
             btn.textContent = 'Show less';
             btn.setAttribute('aria-expanded','true');
             // restore previous scroll position after layout changes
@@ -1680,13 +1687,13 @@
           // preserve current scroll position to avoid page jump when content height changes
           const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
           if(expanded){
-            older.style.display = 'none';
+            older.classList.add('is-hidden');
             btn.textContent = 'Show older experience';
             btn.setAttribute('aria-expanded','false');
             // allow layout to settle then restore scroll
             requestAnimationFrame(() => { window.scrollTo(0, prevY); if(window.updateTimelineConnectors) window.updateTimelineConnectors(); });
           } else {
-            older.style.display = 'block';
+            older.classList.remove('is-hidden');
             btn.textContent = 'Show less';
             btn.setAttribute('aria-expanded','true');
             // allow layout to settle then restore scroll
@@ -1728,8 +1735,8 @@
       const full = document.getElementById('fullSkills');
       if(!downloadBtn) return;
       downloadBtn.addEventListener('click', function(){
-        let prevDisplay = null;
-        if(full){ prevDisplay = full.style.display; full.style.display = 'none'; }
+        let prevHidden = null;
+        if(full){ prevHidden = full.classList.contains('is-hidden'); full.classList.add('is-hidden'); }
         // enable dark print variant (CSS rules under @media print target this class)
         document.documentElement.classList.add('print-dark-mode');
         document.body.classList.add('print-dark-mode');
@@ -1747,7 +1754,7 @@
         const fallbackTimer = setTimeout(() => { try{ window.print(); } catch(e){} }, 1000);
         // restore after print using onafterprint when supported
         const restore = () => {
-          if(full) full.style.display = prevDisplay;
+          if(full) full.classList.toggle('is-hidden', !!prevHidden);
           document.documentElement.classList.remove('print-dark-mode');
           document.body.classList.remove('print-dark-mode');
           try{ clearTimeout(fallbackTimer); }catch(e){}
@@ -1864,12 +1871,12 @@
       const expanded = btn.getAttribute('aria-expanded') === 'true';
       const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
       if(expanded){
-        full.style.display = 'none';
+        full.classList.add('is-hidden');
         btn.textContent = 'Show full skills';
         btn.setAttribute('aria-expanded','false');
         requestAnimationFrame(() => { window.scrollTo(0, prevY); });
       } else {
-        full.style.display = 'block';
+        full.classList.remove('is-hidden');
         btn.textContent = 'Show less';
         btn.setAttribute('aria-expanded','true');
         requestAnimationFrame(() => { window.scrollTo(0, prevY); });
@@ -1886,8 +1893,8 @@
         ev.preventDefault();
         const expanded = btn.getAttribute('aria-expanded') === 'true';
         const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
-        if(expanded){ full.style.display = 'none'; btn.textContent = 'Show full skills'; btn.setAttribute('aria-expanded','false'); }
-        else { full.style.display = 'block'; btn.textContent = 'Show less'; btn.setAttribute('aria-expanded','true'); }
+        if(expanded){ full.classList.add('is-hidden'); btn.textContent = 'Show full skills'; btn.setAttribute('aria-expanded','false'); }
+        else { full.classList.remove('is-hidden'); btn.textContent = 'Show less'; btn.setAttribute('aria-expanded','true'); }
         requestAnimationFrame(() => { window.scrollTo(0, prevY); });
       };
       // remove previous duplicate listeners by cloning node (safe cleanup)
@@ -1905,9 +1912,9 @@
         <img src="assets/profile.jpg" alt="Profile photo of Gonzalo Zurita" class="profile-pic" />
         <h1>Gonzalo Zurita</h1>
         <h2>QA Automation Engineer</h2>
-        <div class="hero-industry" style="display:flex;gap:12px;margin-top:8px;margin-bottom:20px;">
-          <span class="mini-skill-card" style="background: var(--accent-gradient-90); color:#0b1120; border:none; font-weight:700;">FinTech</span>
-          <span class="mini-skill-card" style="background: var(--accent-gradient-90); color:#0b1120; border:none; font-weight:700;">Enterprise Cloud Platforms</span>
+        <div class="hero-industry">
+          <span class="mini-skill-card mini-skill-card--strong">FinTech</span>
+          <span class="mini-skill-card mini-skill-card--strong">Enterprise Cloud Platforms</span>
         </div>
         <p class="hero-description">
           QA Automation Engineer with 5+ years specializing in FinTech and enterprise cloud platforms. Experienced in building scalable automation and CI/CD validation pipelines, API and backend testing, and data/ETL verification. I design data-driven QA strategies and leverage automation and AI-assisted workflows to reduce defects, speed releases, and improve reliability for complex enterprise systems.
@@ -2007,7 +2014,7 @@
         <button class="show-more-btn btn btn--primary" id="showOlderBtn" aria-expanded="false">Show older experience</button>
       </div>
 
-      <div id="olderExperiences" style="display:none">
+      <div id="olderExperiences" class="is-hidden">
         <div class="experience-item" data-date="Oct 2019 — Oct 2020">
           <div class="experience-header">
             <img class="company-logo" src="assets/logos/globant.jpeg" alt="Globant logo" />
@@ -2071,7 +2078,7 @@
         <button type="button" class="show-more-btn btn btn--primary" id="showMoreBtn" aria-expanded="false">Show full skills</button>
       </div>
 
-      <div id="fullSkills" style="display:none">
+      <div id="fullSkills" class="is-hidden">
         <div class="grouped-skills">
           <div class="expertise-category">
             <div class="expertise-category-title">Automation</div>
