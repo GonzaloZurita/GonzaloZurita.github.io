@@ -431,14 +431,16 @@
       margin-bottom:8px;
     }
     .company-logo{
-      width:48px;
-      height:48px;
+      width:64px;
+      height:64px;
       border-radius:8px;
       object-fit:contain;
       background:transparent;
       filter:grayscale(100%) opacity(0.95);
-      flex:0 0 48px;
+      flex:0 0 64px;
     }
+    /* Ensure company logos remain visible (override any print/contrast rules) */
+    .company-logo { display: block !important; opacity: 1 !important; filter: none !important; background: transparent !important; }
     /* Allow specific logos to retain original colors when needed */
     .company-logo.color {
       filter: none !important;
@@ -494,6 +496,7 @@
       .experience-item {
         padding: 24px 12px 18px 18px;
       }
+      .company-logo{ width:48px; height:48px; flex:0 0 48px; }
     }
 
     /* EXPERTISE */
@@ -754,6 +757,19 @@
       .sticky-header .nav-right { margin-left: 0 !important; justify-content: center; align-items: center; }
       .sticky-header .nav-right .download-pdf-btn, .sticky-header .nav-right .schedule-btn { margin-left: 0 !important; margin-right: 8px !important; }
     }
+
+    /* Hide timeline visuals on small screens to simplify layout */
+    @media(max-width:900px){
+      .timeline::before,
+      .timeline .tl-connector,
+      .timeline .tl-badge,
+      .timeline .experience-item::before,
+      .timeline .experience-item::after {
+        display: none !important;
+      }
+      .timeline { padding-left: 12px !important; }
+      .experience-item { border-left: none !important; margin-left: 0 !important; padding-left: 18px !important; }
+    }
         /* Fade-in Animations */
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -920,47 +936,198 @@
             print-color-adjust: exact !important;
           }
           html.print-dark-mode .section-title, body.print-dark-mode .section-title { color:#fff !important; }
-          html.print-dark-mode .expertise-category, body.print-dark-mode .expertise-category,
-          html.print-dark-mode .experience-item, body.print-dark-mode .experience-item,
-          html.print-dark-mode .expertise-item, body.print-dark-mode .expertise-item {
-            background: transparent !important;
-            color:#cbd5e1 !important;
+          /* Ensure cards keep dark backgrounds in print-dark-mode (override earlier white rules) */
+          html.print-dark-mode .container,
+          body.print-dark-mode .container,
+          html.print-dark-mode section,
+          body.print-dark-mode section,
+          html.print-dark-mode .card,
+          body.print-dark-mode .card,
+          html.print-dark-mode .project-card,
+          body.print-dark-mode .project-card,
+          html.print-dark-mode .experience-item,
+          body.print-dark-mode .experience-item,
+          html.print-dark-mode .expertise-item,
+          body.print-dark-mode .expertise-item,
+          html.print-dark-mode .expertise-category,
+          body.print-dark-mode .expertise-category,
+          html.print-dark-mode .edu-card,
+          body.print-dark-mode .edu-card {
+            background: #071220 !important;
+            color: #cbd5e1 !important;
             box-shadow: none !important;
+            border: 1px solid rgba(56,189,248,0.06) !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          /* Try to remove white page gutters where possible: set container to fill printable area and rely on browser "no margins" setting */
+          html.print-dark-mode .container, body.print-dark-mode .container { margin: 0 auto !important; max-width: calc(100% - 24mm) !important; }
+          /* Ensure list bullets and small accents render in color */
+          html.print-dark-mode .experience-item ul li::before { background: #38bdf8 !important; }
+          /* Reduce excessive padding to improve fit */
+          html.print-dark-mode .card, body.print-dark-mode .card, html.print-dark-mode .project-card, body.print-dark-mode .project-card { padding: 12px !important; }
+          /* Use page box margins to avoid white gutters where possible. Note: some browsers enforce minimum non-printable margins.
+             For best result, in the Print dialog choose: Margins = None/Minimum, enable Background Graphics, and disable Headers/Footers. */
+          @page { margin: 0; }
+          /* Make hero contact links and icons print as white for better contrast */
+          html.print-dark-mode .hero .contact a,
+          body.print-dark-mode .hero .contact a,
+          html.print-dark-mode .hero .contact span,
+          body.print-dark-mode .hero .contact span {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          html.print-dark-mode .hero .contact svg,
+          body.print-dark-mode .hero .contact svg {
+            fill: #ffffff !important;
+            color: #ffffff !important;
+          }
+          /* Add a full-page background layer so some browsers include a dark bleed when printing */
+          html.print-dark-mode::before, body.print-dark-mode::before {
+            content: '';
+            position: fixed;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: #0b1120 !important;
+            z-index: -1;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           html.print-dark-mode .mini-skill-card, body.print-dark-mode .mini-skill-card {
             background:transparent !important;
             border-color:#2563eb66 !important;
             color:#38bdf8 !important;
           }
+          /* Preserve hero industry badge gradients in print dark-mode */
+          html.print-dark-mode .hero-industry .mini-skill-card,
+          body.print-dark-mode .hero-industry .mini-skill-card,
+          html.print-dark-mode .hero .mini-skill-card,
+          body.print-dark-mode .hero .mini-skill-card {
+            background: linear-gradient(90deg,#2563eb 0%, #38bdf8 100%) !important;
+            color: #0b1120 !important;
+            border: none !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
           .main-section { padding:8px 0 !important; }
           .section-title { font-size:1.1rem !important; margin-bottom:6px !important; }
           .hero-description { display:block !important; }
-          /* Ensure profile picture prints */
-          .profile-pic{ display:block !important; width:60px !important; height:60px !important; }
+          /* Ensure profile picture prints at normal size */
+          .profile-pic{ display:block !important; width:170px !important; height:170px !important; }
           /* Hide interactive scheduling UI in print */
           #schedule { display:none !important; }
-          /* Compact education cards for print: disable flex stretching and size to content */
-          .edu-grid { display:block !important; gap:8px !important; }
-          .edu-card { display:block !important; width:100% !important; padding:8px !important; min-height: 0 !important; height: auto !important; max-height: none !important; box-shadow:none !important; margin-bottom:10px !important; }
+          /* Print: make Education & Certifications use horizontal space — show cards side-by-side */
+          .edu-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+            gap: 10px !important;
+            align-items: start !important;
+            width: 100% !important;
+          }
+          .edu-card {
+            display: block !important;
+            width: auto !important;
+            padding: 10px !important;
+            min-height: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            page-break-inside: avoid !important;
+          }
           .edu-card .accent{ display:none !important; }
-          .edu-card .cert-badge{ position:static !important; float:right !important; margin-left:8px !important; }
-          /* Compact experience: only show first 3 bullets */
-          .experience-item ul li { display:none !important; }
-          .experience-item ul li:nth-child(-n+3) { display:list-item !important; }
-          .experience-item { page-break-inside: avoid; }
+          /* Keep the certificate badge positioned at top-right when printing
+             so it does not flow into the content or overlap text. */
+          .edu-card { position: relative !important; }
+          .edu-card .cert-badge{
+            position: absolute !important;
+            right: 12px !important;
+            top: 12px !important;
+            background: linear-gradient(90deg,#ffd166,#ff8a00) !important;
+            color: #0b0b0b !important;
+            padding: 6px 10px !important;
+            border-radius: 999px !important;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.28) !important;
+            z-index: 60 !important;
+          }
+          /* Reserve room in the title so the badge doesn't overlap text when printing */
+          .edu-card h4 { padding-right: 140px !important; }
+          @media print and (min-width: 1200px) {
+            .edu-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+           /* Print: keep all bullets for the latest (visible) experiences; hide bullets only for older experiences
+             that are inside the #olderExperiences container to keep the print compact while preserving
+             full detail for the most recent three entries. */
+           #olderExperiences .experience-item ul li { display: none !important; }
+           /* Ensure main experience items are not broken across pages */
+           .experience-item { page-break-inside: avoid; }
           /* Keep full skills visible but pack them tighter into more columns */
           #fullSkills { display:block !important; }
           .top-skills { display:flex !important; flex-wrap:wrap; gap:6px !important; }
           .skill-badge{ padding:6px 10px !important; font-size:0.9rem !important; }
-          /* Make grouped cards flow tighter and use 3 columns to save vertical space */
-          .grouped-skills { grid-template-columns: repeat(3, 1fr) !important; gap:8px !important; }
-          .expertise-category { padding:8px !important; }
-          .mini-skill-cards { gap:6px !important; }
-          .mini-skill-card{ padding:6px 10px !important; font-size:0.85rem !important; }
-          /* Allow QA Skills card to span more columns on print */
-          .grouped-skills .expertise-category.wide { grid-column: span 3 !important; }
-          /* Avoid page breaks inside small blocks */
-          .expertise-category, .expertise-item { page-break-inside: avoid; }
+          /* Make grouped skill categories flow as a responsive grid in print so they use horizontal
+             space efficiently and reduce tall empty gaps beside long categories like QA Skills. */
+          .grouped-skills {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 8px !important;
+            align-items: start !important;
+            width: 100% !important;
+          }
+          .grouped-skills > .expertise-category {
+            margin: 0 !important;
+            padding: 8px 10px !important;
+            min-height: 0 !important;
+            height: auto !important;
+            page-break-inside: avoid !important;
+          }
+          .grouped-skills > .expertise-category .expertise-category-title { margin-bottom: 6px !important; font-size: 1.02rem !important; }
+          .grouped-skills > .expertise-category .mini-skill-cards { gap: 6px !important; }
+          .mini-skill-card { padding: 6px 10px !important; font-size: 0.92rem !important; }
+          /* Allow QA Skills card to span full width in print and lay out its badges into columns
+             so the long QA list uses horizontal space and reduces vertical height.
+             Also make it the top-most category by placing it in row 1 of the grid. */
+          .grouped-skills > .expertise-category.wide {
+            grid-column: 1 / -1 !important;
+            grid-row: 1 !important;
+            z-index: 6 !important;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 6px !important;
+            padding: 8px 10px !important;
+            align-items: start !important;
+          }
+          /* Use background-image underline for ALL category titles in print so underlines are consistent */
+          .expertise-category-title {
+            display: inline-block !important;
+            width: auto !important;
+            white-space: normal !important;
+            justify-self: start !important;
+            align-self: start !important;
+            background-image: linear-gradient(90deg,#2563eb 0%, #38bdf8 100%) !important;
+            background-repeat: no-repeat !important;
+            background-position: left bottom !important;
+            background-size: auto 3px !important;
+            padding-bottom: 6px !important;
+          }
+          .expertise-category-title::after { display: none !important; }
+          /* Make the wide category's badge list flow into multiple columns inside the full-width card */
+          .grouped-skills > .expertise-category.wide .mini-skill-cards {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+            gap: 6px !important;
+          }
+          @media print and (min-width: 1200px) {
+            .grouped-skills > .expertise-category.wide { grid-template-columns: 1fr 1fr !important; }
+            .grouped-skills > .expertise-category.wide .mini-skill-cards { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; }
+          }
+          /* Tighten the Top Skills and section spacing */
+          .top-skills { gap: 6px !important; margin-bottom: 12px !important; }
+          .section-title { margin-bottom: 10px !important; }
+          .card, .project-card, .experience-item { padding-top: 10px !important; padding-bottom: 10px !important; }
           a { color:#222 !important; text-decoration:underline !important; }
         }
     .sticky-header a{ color:#8fd6ff; text-decoration:none !important; font-weight:600; margin:0 8px; padding:6px 8px; border-radius:6px; font-size:1rem; transition:background 0.12s, color 0.12s; }
@@ -1021,6 +1188,7 @@
       letter-spacing: 0.01em;
       position: relative;
       display: inline-block;
+      width: auto !important;
     }
     .expertise-category-title::after{
       content: '';
@@ -1182,7 +1350,9 @@
     .edu-card h4{ margin:0 0 6px 0; color:#e6f6ff; font-size:1.05rem; }
     .edu-card .experience-meta{ display:block; color:#9fb6d9; margin-bottom:8px; font-size:0.95rem; }
     .edu-card .edu-note{ color:#c9e6ff; font-size:0.95rem; margin:6px 0 0 0; }
-    .edu-card .cert-badge{ position:absolute; right:12px; top:12px; background:linear-gradient(90deg,#ffd166,#ff8a00); color:#0b0b0b; padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.28); }
+    .edu-card .cert-badge{ position:absolute; right:12px; top:12px; background:linear-gradient(90deg,#ffd166,#ff8a00); color:#0b0b0b; padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.28); z-index:40; }
+    /* Reserve space so the badge doesn't overlap the title text */
+    .edu-card h4 { padding-right: 130px; }
     @media(max-width:900px){ .edu-grid{ flex-direction:column; } .edu-card{ min-width: auto; } }
 
     /* Light mode adjustments */
@@ -1518,15 +1688,32 @@
       downloadBtn.addEventListener('click', function(){
         let prevDisplay = null;
         if(full){ prevDisplay = full.style.display; full.style.display = 'none'; }
+        // enable dark print variant (CSS rules under @media print target this class)
+        document.documentElement.classList.add('print-dark-mode');
+        document.body.classList.add('print-dark-mode');
         // ensure light-mode off for print clarity
         document.body.classList.remove('light-mode');
-        // small timeout to let styles apply then print
-        setTimeout(() => { window.print(); }, 200);
+        // Ensure dark print styles are applied before printing.
+        // Force a layout reflow then wait for two animation frames to allow the UA to apply print styles.
+        const triggerPrint = () => {
+          try { document.documentElement.getBoundingClientRect(); } catch(e){}
+          requestAnimationFrame(()=> requestAnimationFrame(()=> { window.print(); }));
+        };
+        // Primary: use RAF-based trigger
+        triggerPrint();
+        // Fallback: ensure print is called after a short timeout if RAF doesn't fire
+        const fallbackTimer = setTimeout(() => { try{ window.print(); } catch(e){} }, 1000);
         // restore after print using onafterprint when supported
-        const restore = () => { if(full) full.style.display = prevDisplay; window.removeEventListener('afterprint', restore); };
+        const restore = () => {
+          if(full) full.style.display = prevDisplay;
+          document.documentElement.classList.remove('print-dark-mode');
+          document.body.classList.remove('print-dark-mode');
+          try{ clearTimeout(fallbackTimer); }catch(e){}
+          window.removeEventListener('afterprint', restore);
+        };
         window.addEventListener('afterprint', restore);
-        // fallback restore in 2s
-        setTimeout(restore, 2000);
+        // fallback restore in 3s
+        setTimeout(restore, 3000);
       });
     })();
 
@@ -1724,7 +1911,7 @@
       <div class="timeline" role="list">
       <div class="experience-item" data-date="Jul 2024 — Present">
         <div class="experience-header">
-          <img class="company-logo color white-bg" src="assets/logos/ingram-micro.svg" alt="Ingram Micro logo" loading="lazy" />
+          <img class="company-logo color white-bg" src="assets/logos/ingram-micro.jpg" alt="Ingram Micro logo" />
           <div>
             <h4>QA Engineer</h4>
             <span class="experience-meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
@@ -1742,7 +1929,7 @@
       </div>
       <div class="experience-item" data-date="Aug 2022 — Feb 2024">
         <div class="experience-header">
-          <img class="company-logo color" src="assets/logos/rootstrap.jpg" alt="Rootstrap logo" loading="lazy" />
+          <img class="company-logo color" src="assets/logos/rootstrap.jpg" alt="Rootstrap logo" />
           <div>
             <h4>Quality Assurance Engineer</h4>
             <span class="experience-meta">Rootstrap - Caramel | August 2022 - February 2024</span>
@@ -1758,7 +1945,7 @@
       </div>
       <div class="experience-item" data-date="Oct 2020 — Aug 2022">
         <div class="experience-header">
-          <img class="company-logo" src="assets/logos/fligoo.jpg" alt="Fligoo logo" loading="lazy" />
+          <img class="company-logo" src="assets/logos/fligoo.jpg" alt="Fligoo logo" />
           <div>
             <h4>Quality Assurance Engineer</h4>
             <span class="experience-meta">Fligoo - Broadridge | October 2020 - August 2022</span>
@@ -1780,7 +1967,7 @@
       <div id="olderExperiences" style="display:none">
         <div class="experience-item" data-date="Oct 2019 — Oct 2020">
           <div class="experience-header">
-            <img class="company-logo" src="assets/logos/globant.jpeg" alt="Globant logo" loading="lazy" />
+            <img class="company-logo" src="assets/logos/globant.jpeg" alt="Globant logo" />
             <div>
               <h4>Quality Analyst -> Quality Assurance Lead</h4>
               <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
@@ -1798,7 +1985,7 @@
 
         <div class="experience-item" data-date="Feb 2019 — Aug 2019">
           <div class="experience-header">
-            <img class="company-logo color white-bg" src="assets/logos/claro.svg" alt="Claro logo" loading="lazy" />
+            <img class="company-logo color white-bg" src="assets/logos/claro.svg" alt="Claro logo" />
             <div>
               <h4>Testing Analyst</h4>
               <span class="experience-meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
