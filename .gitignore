@@ -1,0 +1,9 @@
+# Ignore backup files and temporary exports
+backup/
+node_modules/
+.DS_Store
+/.vscode
+*.log
+dist/
+coverage/
+.env
