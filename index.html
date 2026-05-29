@@ -81,7 +81,10 @@
 
     <!-- EXPERIENCE -->
     <section id="experience" class="experience-section main-section">
-      <h3 class="section-title" data-i18n="sections.experience">Professional Experience</h3>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <h3 class="section-title" data-i18n="sections.experience">Professional Experience</h3>
+        <button id="addExperienceBtn" class="btn btn--ghost" type="button" title="Add experience">Add</button>
+      </div>
       <div class="timeline" role="list">
       <div class="experience-item" data-date="Jul 2024 — Present" data-i18n-attr="data-date" data-i18n="experiences.0.date">
         <div class="experience-header">
@@ -175,6 +178,24 @@
       </div>
       </div>
     </section>
+    <!-- Add Experience Modal (hidden) -->
+    <div id="addExperienceModal" class="modal-overlay is-hidden" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addExperienceTitle">
+        <h4 id="addExperienceTitle">Add Experience</h4>
+        <form id="addExperienceForm">
+          <label>Date (shown on timeline)<br><input name="date" placeholder="Jun 2026 — Present" required></label>
+          <label>Role<br><input name="role" placeholder="QA Engineer"></label>
+          <label>Company meta<br><input name="company_meta" placeholder="Company · Jun 2026 - Present"></label>
+          <label>Note<br><input name="note" placeholder="Short note"></label>
+          <label>Bullets (one per line)<br><textarea name="bullets" rows="4" placeholder="Led automation\nImproved CI"></textarea></label>
+          <label>Logo src (optional)<br><input name="logoSrc" placeholder="assets/logos/example.png"></label>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn--primary">Add</button>
+            <button type="button" id="addExperienceCancel" class="btn btn--ghost">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="section-divider"></div>
 
     <!-- TECHNICAL SKILLS -->
@@ -281,6 +302,19 @@
       </div>
     </section>
     <div class="section-divider"></div>
+
+    <!-- Snippet modal shown after adding experience: contains HTML to copy/paste into index.html -->
+    <div id="snippetModal" class="modal-overlay is-hidden" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="snippetTitle">
+        <h4 id="snippetTitle">Experience HTML Snippet</h4>
+        <p>Copy this snippet and paste it inside the <code>&lt;div class="timeline"&gt;</code> container in <strong>index.html</strong>. Place it before the <code>&lt;div class="show-more-wrap"&gt;</code> or before the <code>&lt;div id="olderExperiences"&gt;</code> element so it appears among the visible entries.</p>
+        <textarea id="snippetArea" rows="8" style="width:100%; font-family:monospace; font-size:0.9rem;"></textarea>
+        <div class="modal-actions">
+          <button id="copySnippetBtn" class="btn btn--primary">Copy to clipboard</button>
+          <button id="closeSnippetBtn" class="btn btn--ghost">Close</button>
+        </div>
+      </div>
+    </div>
 
     <!-- PROFESSIONAL DEVELOPMENT -->
     <section id="professional-development" class="main-section">

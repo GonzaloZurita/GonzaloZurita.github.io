@@ -160,6 +160,7 @@ body.light-mode .contact-form textarea:focus {
     cursor:pointer;
     box-shadow: var(--cta-shadow-1);
     transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+    background-clip: padding-box;
     -webkit-background-clip: padding-box;
   }
   .btn:hover{ box-shadow: 0 10px 36px rgba(2,6,23,0.22), 0 0 18px rgba(56,189,248,0.10); border-color: rgba(255,255,255,0.06); }
@@ -176,6 +177,7 @@ body.light-mode .contact-form textarea:focus {
     justify-content:center;
     line-height:1;
     box-shadow: 0 2px 8px rgba(2,6,23,0.12), 0 0 6px rgba(56,189,248,0.06);
+    background-clip: padding-box;
     -webkit-background-clip: padding-box;
   }
   .btn--ghost{
@@ -907,6 +909,20 @@ footer{
 /* Bump theme toggle to avoid overlap with language toggle (default) */
 .toggle-mode { top: 88px; }
 
+/* Add Experience UI modal and button styles */
+/* Add Experience button hidden by default; revealed via keyboard shortcut */
+#addExperienceBtn { font-size:0.9rem; padding:6px 10px; display:none !important; }
+.show-add-btn #addExperienceBtn { display: inline-flex !important; }
+.modal-overlay { position: fixed; left:0; top:0; right:0; bottom:0; background: rgba(2,6,23,0.6); display:flex; align-items:center; justify-content:center; z-index:2000; }
+.modal { width:420px; max-width:92%; background: var(--panel-bg); color:var(--muted-text); border-radius:12px; padding:18px; box-shadow: 0 12px 48px rgba(2,6,23,0.6); border:1px solid rgba(56,189,248,0.06); }
+.modal h4{ margin:0 0 8px 0; color:var(--accent-2); }
+.modal form label{ display:block; margin-bottom:10px; font-size:0.95rem; }
+.modal input, .modal textarea { width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-muted); background:var(--bg-850); color:var(--muted-text); }
+.modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+.modal-overlay.is-hidden{ display:none; }
+/* hide add button and modal in print */
+@media print{ #addExperienceBtn, #addExperienceModal { display:none !important; } }
+
 /* Hide download buttons in light mode as requested */
 body.light-mode .download-pdf-btn { display:none !important; }
 
@@ -1460,6 +1476,9 @@ body.light-mode .edu-card .experience-meta{ color:#475569; }
   #recommendations { page-break-before: always !important; -webkit-page-break-before: always !important; }
   /* Ensure main experience items are not broken across pages */
   .experience-item { page-break-inside: avoid; }
+  /* Print: only include the first three experiences to keep PDF concise even if expanded */
+  .experience-section .timeline > .experience-item:nth-of-type(n+4) { display: none !important; }
+  .experience-section .timeline #olderExperiences .experience-item { display: none !important; }
   /* Keep full skills visible but pack them tighter into more columns */
   #fullSkills { display:block !important; }
   .top-skills { display:flex !important; flex-wrap:wrap; gap:6px !important; }

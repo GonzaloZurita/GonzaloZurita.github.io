@@ -112,6 +112,45 @@ try{
     }
     // expose for external calls (e.g., when content toggles open)
     window.updateTimelineConnectors = updateConnectors;
+    // Helper: programmatically add a new experience card with the correct structure
+    // Usage: window.addExperience({ date:'Aug 2026 — Present', role:'QA Engineer', company_meta:'Acme Co · Aug 2026 - Present', note:'Short note', bullets:['Did X','Did Y'], logoSrc:'assets/logos/acme.png', logoAlt:'Acme logo', logoClass:'color' , containerId: null })
+    window.addExperience = function(opts){
+      try{
+        const options = Object.assign({}, opts || {});
+        const container = (options.containerId && document.getElementById(options.containerId)) || document.querySelector('.timeline');
+        if(!container) { console.warn('addExperience: no timeline container found'); return null; }
+        const item = document.createElement('div');
+        item.className = 'experience-item';
+        if(options.date) item.setAttribute('data-date', options.date);
+        else { item.setAttribute('data-date',''); console.warn('addExperience: missing date in options'); }
+        const logoCls = options.logoClass ? ('company-logo ' + options.logoClass) : 'company-logo';
+        const logoSrc = options.logoSrc ? options.logoSrc : '';
+        const logoAlt = options.logoAlt ? options.logoAlt : '';
+        const role = options.role ? options.role : '';
+        const meta = options.company_meta ? options.company_meta : '';
+        const note = options.note ? options.note : '';
+        const bullets = Array.isArray(options.bullets) ? options.bullets : [];
+        item.innerHTML = ''+
+          '<div class="experience-header">'+
+            '<img class="'+logoCls+'" src="'+logoSrc+'" alt="'+logoAlt+'" />'+
+            '<div>'+
+              '<h4>'+role+'</h4>'+
+              '<span class="experience-meta">'+meta+'</span>'+
+            '</div>'+
+          '</div>'+
+          '<p class="muted-note">'+note+'</p>'+
+          '<ul>'+(bullets.map(b=> '<li>'+b+'</li>').join(''))+'</ul>';
+        // Insert into visible timeline area: before the show-more button or olderExperiences container if present
+        const insertBeforeNode = container.querySelector('.show-more-wrap') || container.querySelector('#olderExperiences') || container.firstChild;
+        if(insertBeforeNode) container.insertBefore(item, insertBeforeNode);
+        else container.appendChild(item);
+        // ensure images inside new item trigger connector updates
+        item.querySelectorAll('img').forEach(img => { if(!img.complete) img.addEventListener('load', () => { setTimeout(updateConnectors,40); }); });
+        // schedule an update of the timeline connectors
+        setTimeout(()=>{ try{ rebalanceTimeline(3); updateConnectors(); }catch(e){} }, 60);
+        return item;
+      }catch(e){ console.error('addExperience failed', e); return null; }
+    };
     window.addEventListener('load', function(){
       try{ updateConnectors(); }catch(e){}
       // schedule a few additional recalculations to handle delayed image/layout changes
@@ -121,6 +160,37 @@ try{
     });
     window.addEventListener('DOMContentLoaded', function(){ try{ updateConnectors(); }catch(e){} });
     window.addEventListener('resize', function(){ window.requestAnimationFrame(updateConnectors); });
+    // Ensure timeline keeps only a limited number of items visible and moves older ones into #olderExperiences
+    function rebalanceTimeline(limit){
+      try{
+        limit = Number(limit) || 3;
+        const timeline = document.querySelector('.timeline');
+        if(!timeline) return;
+        let older = document.getElementById('olderExperiences');
+        if(!older){
+          older = document.createElement('div');
+          older.id = 'olderExperiences';
+          older.className = 'is-hidden';
+          timeline.appendChild(older);
+        }
+        // direct experience-item children of timeline (exclude items inside #olderExperiences)
+        const directItems = Array.from(timeline.children).filter(n=> n.classList && n.classList.contains('experience-item'));
+        // If there are more than `limit`, move the extras (from index limit onward) into older
+        if(directItems.length > limit){
+          const extras = directItems.slice(limit);
+          extras.forEach(el => older.appendChild(el));
+        } else if(directItems.length < limit){
+          // move items back from older into timeline to fill up to limit, preserving order
+          const olderItems = Array.from(older.querySelectorAll('.experience-item'));
+          if(olderItems.length){
+            const need = Math.min(limit - directItems.length, olderItems.length);
+            const toMove = olderItems.splice(0, need);
+            // insert before the older container so they appear in the visible list
+            toMove.forEach(item => timeline.insertBefore(item, older));
+          }
+        }
+      }catch(e){ console.error('rebalanceTimeline error', e); }
+    }
     // Watch for older experiences becoming visible and for images loading inside timeline
     const olderBlock = document.getElementById('olderExperiences');
     if(olderBlock){
@@ -167,7 +237,10 @@ try{
             }
           }
         }
-        if(schedule) setTimeout(updateConnectors, 60);
+        if(schedule){
+          try{ rebalanceTimeline(3); }catch(e){}
+          setTimeout(updateConnectors, 60);
+        }
       });
       moTimeline.observe(timelineEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
       // images inside timeline should trigger connector recalculation when they load
@@ -269,6 +342,91 @@ try{
         }
       });
     }
+  });
+
+  // Add Experience UI handlers
+  document.addEventListener('DOMContentLoaded', function(){
+    const addBtn = document.getElementById('addExperienceBtn');
+    const modal = document.getElementById('addExperienceModal');
+    const form = document.getElementById('addExperienceForm');
+    const cancel = document.getElementById('addExperienceCancel');
+    let revealTimer = null;
+    function openModal(){ if(!modal) return; modal.classList.remove('is-hidden'); modal.setAttribute('aria-hidden','false'); const first = modal.querySelector('input,textarea'); if(first) first.focus(); }
+    function closeModal(){ if(!modal) return; modal.classList.add('is-hidden'); modal.setAttribute('aria-hidden','true'); }
+    if(addBtn && modal){
+      addBtn.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+    }
+    if(cancel){ cancel.addEventListener('click', function(e){ e.preventDefault(); closeModal(); }); }
+    if(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const fd = new FormData(form);
+        const date = (fd.get('date')||'').trim();
+        const role = (fd.get('role')||'').trim();
+        const company_meta = (fd.get('company_meta')||'').trim();
+        const note = (fd.get('note')||'').trim();
+        const bulletsRaw = (fd.get('bullets')||'').trim();
+        const bullets = bulletsRaw ? bulletsRaw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean) : [];
+        const logoSrc = (fd.get('logoSrc')||'').trim();
+        const opts = { date, role, company_meta, note, bullets, logoSrc, logoAlt: '', logoClass: '' };
+        try{
+          const newItem = window.addExperience(opts);
+          // reveal older toggle if needed and update connectors
+          try{ rebalanceTimeline(3); }catch(e){}
+          try{ updateConnectors(); }catch(e){}
+          if(newItem){ setTimeout(()=>{ newItem.scrollIntoView({behavior:'smooth', block:'center'}); }, 120); }
+          // Build HTML snippet for persistence and show it in the snippet modal
+          try{
+            const esc = (s)=> (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            const snippet = [];
+            snippet.push('<div class="experience-item" data-date="'+esc(date)+'">');
+            snippet.push('  <div class="experience-header">');
+            if(logoSrc) snippet.push('    <img class="company-logo" src="'+esc(logoSrc)+'" alt="">');
+            snippet.push('    <div>');
+            snippet.push('      <h4>'+esc(role)+'</h4>');
+            snippet.push('      <span class="experience-meta">'+esc(company_meta)+'</span>');
+            snippet.push('    </div>');
+            snippet.push('  </div>');
+            if(note) snippet.push('  <p class="muted-note">'+esc(note)+'</p>');
+            if(bullets && bullets.length){ snippet.push('  <ul>'); bullets.forEach(b=> snippet.push('    <li>'+esc(b)+'</li>')); snippet.push('  </ul>'); }
+            snippet.push('</div>');
+            const snippetStr = snippet.join('\n');
+            const snippetModal = document.getElementById('snippetModal');
+            const snippetArea = document.getElementById('snippetArea');
+            if(snippetArea){ snippetArea.value = snippetStr; }
+            if(snippetModal){ snippetModal.classList.remove('is-hidden'); snippetModal.setAttribute('aria-hidden','false'); }
+            // try to copy to clipboard automatically
+            if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(snippetStr).then(()=>{ console.log('Snippet copied to clipboard'); }).catch(()=>{}); }
+          }catch(e){ console.error('Failed to build snippet', e); }
+        }catch(er){ console.error('Failed to add experience via UI', er); }
+        closeModal();
+      });
+    }
+    // Snippet modal handlers
+    const snippetModal = document.getElementById('snippetModal');
+    const copySnippetBtn = document.getElementById('copySnippetBtn');
+    const closeSnippetBtn = document.getElementById('closeSnippetBtn');
+    if(copySnippetBtn){ copySnippetBtn.addEventListener('click', function(){ const area = document.getElementById('snippetArea'); if(!area) return; const txt = area.value; if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(()=>{ copySnippetBtn.textContent = 'Copied'; setTimeout(()=> copySnippetBtn.textContent='Copy to clipboard',1200); }).catch(()=>{}); } else { area.select(); document.execCommand('copy'); copySnippetBtn.textContent = 'Copied'; setTimeout(()=> copySnippetBtn.textContent='Copy to clipboard',1200); } }); }
+    if(closeSnippetBtn){ closeSnippetBtn.addEventListener('click', function(){ if(snippetModal) snippetModal.classList.add('is-hidden'); if(snippetModal) snippetModal.setAttribute('aria-hidden','true'); }); }
+    // close modal on Escape or click outside
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+    if(modal){ modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); }); }
+    // Keyboard shortcut: Ctrl+Shift+E reveals the Add button and opens the modal
+    document.addEventListener('keydown', function(e){
+      // ignore when typing in inputs or editable regions
+      const tgt = e.target || {}; const tag = (tgt.tagName || '').toLowerCase();
+      if(tag === 'input' || tag === 'textarea' || tgt.isContentEditable) return;
+      if(e.ctrlKey && e.shiftKey && (e.key && e.key.toLowerCase() === 'e')){
+        e.preventDefault();
+        // reveal button by adding class to body
+        document.documentElement.classList.add('show-add-btn');
+        // open modal directly for convenience
+        openModal();
+        // auto-hide the button after 12s if modal is closed
+        clearTimeout(revealTimer);
+        revealTimer = setTimeout(()=>{ document.documentElement.classList.remove('show-add-btn'); }, 12000);
+      }
+    });
   });
   // Light / Dark mode toggle — default to dark mode (ignore local config)
   (function(){
