@@ -11,6 +11,17 @@ try{
 (function(){
   // Smooth scroll with offset for sticky header
   const header = document.querySelector('.sticky-header');
+  function i18nGet(key, fallback){
+    try{
+      if(window && window.__i18n){
+        const parts = key.split('.');
+        let v = window.__i18n;
+        for(const p of parts){ if(v && typeof v === 'object' && p in v) v = v[p]; else { v = undefined; break; } }
+        if(v !== undefined && v !== null) return v;
+      }
+    }catch(e){}
+    return fallback || '';
+  }
   // Timeline connector renderer: create pixel-perfect horizontal connectors
   (function(){
     function updateConnectors(){
@@ -189,12 +200,12 @@ try{
         const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
         if(expanded){
           full.classList.add('is-hidden');
-          btn.textContent = 'Show full skills';
+          btn.textContent = i18nGet('buttons.show_more_skills','Show full skills');
           btn.setAttribute('aria-expanded','false');
           requestAnimationFrame(() => { window.scrollTo(0, prevY); });
         } else {
           full.classList.remove('is-hidden');
-          btn.textContent = 'Show less';
+          btn.textContent = i18nGet('buttons.show_less','Show less');
           btn.setAttribute('aria-expanded','true');
           requestAnimationFrame(() => { window.scrollTo(0, prevY); });
         }
@@ -229,7 +240,10 @@ try{
         });
       }
     const toggle = document.getElementById('toggleModeBtn');
-    function updateTogglePosition(){ if(!toggle || !headerEl) return; const h = headerEl.offsetHeight || 0; toggle.style.top = (h + 8) + 'px'; }
+    const langToggle = document.getElementById('langToggleBtn');
+    function updateTogglePosition(){ if(!toggle || !headerEl) return; const h = headerEl.offsetHeight || 0; if(langToggle) langToggle.style.top = (h + 8) + 'px'; // place language toggle just below header
+      // place theme toggle lower to avoid overlap with language control
+      toggle.style.top = (h + 56) + 'px'; }
     function checkMode(){ if(window.innerWidth <= 900) enterCompact(); else leaveCompact(); updateTogglePosition(); }
     checkMode();
     window.addEventListener('resize', checkMode);
@@ -244,12 +258,12 @@ try{
         const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
         if(expanded){
           older.classList.add('is-hidden');
-          btn.textContent = 'Show older experience';
+          btn.textContent = i18nGet('buttons.show_older_experience','Show older experience');
           btn.setAttribute('aria-expanded','false');
           requestAnimationFrame(() => { window.scrollTo(0, prevY); if(window.updateTimelineConnectors) window.updateTimelineConnectors(); });
         } else {
           older.classList.remove('is-hidden');
-          btn.textContent = 'Show less';
+          btn.textContent = i18nGet('buttons.show_less','Show less');
           btn.setAttribute('aria-expanded','true');
           requestAnimationFrame(() => { window.scrollTo(0, prevY); if(window.updateTimelineConnectors){ setTimeout(window.updateTimelineConnectors,50); } });
         }
@@ -279,6 +293,58 @@ try{
         applyMode(!document.body.classList.contains('light-mode'));
       });
     }
+  })();
+
+  // Language toggle: minimal i18n loader and persistence
+  (function(){
+    const LANG_KEY = 'siteLang';
+    function applyLangClass(lang){ document.documentElement.classList.remove('lang-en','lang-es'); document.documentElement.classList.add('lang-' + lang); }
+    function setLangButtonLabel(lang){
+      const b = document.getElementById('langToggleBtn'); if(!b) return;
+      const active = (lang === 'es') ? 'es' : 'en';
+      b.innerHTML = ''+
+        '<span class="lang-side '+(active==='en'?'active':'')+'" data-side="en">EN</span>'+
+        '<span class="lang-divider">|</span>'+
+        '<span class="lang-side '+(active==='es'?'active':'')+'" data-side="es">ES</span>';
+    }
+    window.setLanguage = function(lang){ if(!lang) return; // try to fetch translations, but still apply label/class even if fetch fails
+      fetch('i18n/' + lang + '.json').then(r=> r.json()).then(data => {
+        window.__i18n = data;
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const key = el.getAttribute('data-i18n');
+          if(!key) return;
+          const attr = el.getAttribute('data-i18n-attr');
+          const parts = key.split('.');
+          let v = data;
+          for(const p of parts){ if(v && typeof v === 'object' && p in v) v = v[p]; else { v = undefined; break; } }
+          if(v === undefined || v === null) return;
+          if(attr) el.setAttribute(attr, v);
+          else el.textContent = v;
+        });
+        applyLangClass(lang);
+        setLangButtonLabel(lang);
+        try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
+      }).catch(err=>{
+        console.warn('Failed to load i18n', err); applyLangClass(lang); setLangButtonLabel(lang); try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
+      });
+    };
+    document.addEventListener('DOMContentLoaded', function(){
+      const saved = (localStorage.getItem(LANG_KEY) || 'en');
+      // initialize button label and class immediately
+      setLangButtonLabel(saved); applyLangClass(saved);
+      // attempt to load and apply translations
+      if(window.setLanguage) window.setLanguage(saved);
+      const btn = document.getElementById('langToggleBtn');
+      if(btn){
+        // clicking anywhere toggles; clicking a side also toggles to that exact language
+        btn.addEventListener('click', function(e){
+          const targetSide = e.target && e.target.getAttribute && e.target.getAttribute('data-side');
+          const cur = document.documentElement.classList.contains('lang-es') ? 'es' : 'en';
+          const next = targetSide ? (targetSide === 'es' ? 'es' : 'en') : (cur === 'en' ? 'es' : 'en');
+          if(next !== cur) window.setLanguage(next);
+        });
+      }
+    });
   })();
   // Download PDF button: prepare compact view and trigger print
   (function(){
@@ -418,12 +484,12 @@ try{
     const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
     if(expanded){
       full.classList.add('is-hidden');
-      btn.textContent = 'Show full skills';
+      btn.textContent = i18nGet('buttons.show_more_skills','Show full skills');
       btn.setAttribute('aria-expanded','false');
       requestAnimationFrame(() => { window.scrollTo(0, prevY); });
     } else {
       full.classList.remove('is-hidden');
-      btn.textContent = 'Show less';
+      btn.textContent = i18nGet('buttons.show_less','Show less');
       btn.setAttribute('aria-expanded','true');
       requestAnimationFrame(() => { window.scrollTo(0, prevY); });
     }
@@ -439,8 +505,8 @@ try{
       ev.preventDefault();
       const expanded = btn.getAttribute('aria-expanded') === 'true';
       const prevY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      if(expanded){ full.classList.add('is-hidden'); btn.textContent = 'Show full skills'; btn.setAttribute('aria-expanded','false'); }
-      else { full.classList.remove('is-hidden'); btn.textContent = 'Show less'; btn.setAttribute('aria-expanded','true'); }
+      if(expanded){ full.classList.add('is-hidden'); btn.textContent = i18nGet('buttons.show_more_skills','Show full skills'); btn.setAttribute('aria-expanded','false'); }
+      else { full.classList.remove('is-hidden'); btn.textContent = i18nGet('buttons.show_less','Show less'); btn.setAttribute('aria-expanded','true'); }
       requestAnimationFrame(() => { window.scrollTo(0, prevY); });
     };
     // remove previous duplicate listeners by cloning node (safe cleanup)

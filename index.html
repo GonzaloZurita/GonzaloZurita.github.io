@@ -9,22 +9,23 @@
   </head>
   <body>
 
+  <button id="langToggleBtn" class="lang-toggle" title="Toggle language" aria-label="Toggle language"></button>
   <button id="toggleModeBtn" class="toggle-mode" title="Toggle theme">🌙</button>
 
   <div class="sticky-header">
     <div class="nav-left">
-      <a href="#experience">Experience</a>
-      <a href="#technical-skills">Skills</a>
-      <a href="#professional-development">Learning</a>
-      <a href="#interests">Interested</a>
-      <a href="#recommendations">Recommendations</a>
-      <a href="#education">Education</a>
+      <a href="#experience" data-i18n="nav.experience">Experience</a>
+      <a href="#technical-skills" data-i18n="nav.skills">Skills</a>
+      <a href="#professional-development" data-i18n="nav.learning">Learning</a>
+      <a href="#interests" data-i18n="nav.interests">Interested</a>
+      <a href="#recommendations" data-i18n="nav.recommendations">Recommendations</a>
+      <a href="#education" data-i18n="nav.education">Education</a>
     </div>
     <button id="headerNavPrev" class="header-nav prev" aria-hidden="true">‹</button>
     <button id="headerNavNext" class="header-nav next" aria-hidden="true">›</button>
-    <div class="nav-right">
-      <button class="download-pdf-btn btn btn--primary" id="downloadPdfBtn">Download PDF</button>
-      <a href="#schedule" id="scheduleStickyLink" class="download-pdf-btn schedule-btn btn btn--ghost">Schedule a Meeting</a>
+      <div class="nav-right">
+      <button class="download-pdf-btn btn btn--primary" id="downloadPdfBtn" data-i18n="buttons.download_pdf">Download PDF</button>
+      <a href="#schedule" id="scheduleStickyLink" class="download-pdf-btn schedule-btn btn btn--ghost" data-i18n="buttons.schedule_meeting">Schedule a Meeting</a>
     </div>
   </div>
 
@@ -33,24 +34,24 @@
     <section class="hero main-section">
       <div class="hero-content">
         <img src="assets/profile.jpg" alt="Profile photo of Gonzalo Zurita" class="profile-pic" />
-        <h1>Gonzalo Zurita</h1>
-        <h2>QA Automation Engineer</h2>
+        <h1 data-i18n="hero.name">Gonzalo Zurita</h1>
+        <h2 data-i18n="hero.role">QA Automation Engineer</h2>
         <div class="hero-industry">
           <span class="mini-skill-card mini-skill-card--strong">FinTech</span>
           <span class="mini-skill-card mini-skill-card--strong">Enterprise Cloud Platforms</span>
         </div>
-        <p class="hero-description">
+        <p class="hero-description" data-i18n="hero.description">
           QA Automation Engineer with 5+ years specializing in FinTech and enterprise cloud platforms. Experienced in building scalable automation and CI/CD validation pipelines, API and backend testing, and data/ETL verification. I design data-driven QA strategies and leverage automation and AI-assisted workflows to reduce defects, speed releases, and improve reliability for complex enterprise systems.
         </p>
         <div class="stack">
-          <span>Python</span>
-          <span>Test Automation</span>
-          <span>Playwright</span>
-          <span>API & Backend Testing</span>
-          <span>CI/CD</span>
-          <span>ETL Validations</span>
-          <span>AI-assisted Development</span>
-          <span>Agentic Test Automation</span>
+          <span data-i18n="stack.0">Python</span>
+          <span data-i18n="stack.1">Test Automation</span>
+          <span data-i18n="stack.2">Playwright</span>
+          <span data-i18n="stack.3">API & Backend Testing</span>
+          <span data-i18n="stack.4">CI/CD</span>
+          <span data-i18n="stack.5">ETL Validations</span>
+          <span data-i18n="stack.6">AI-assisted Development</span>
+          <span data-i18n="stack.7">Agentic Test Automation</span>
         </div>
         <div class="contact" id="contact">
           <a href="mailto:gonzalo.zurita92@gmail.com" class="contact-link" title="Email">
@@ -80,95 +81,95 @@
 
     <!-- EXPERIENCE -->
     <section id="experience" class="experience-section main-section">
-      <h3 class="section-title">Professional Experience</h3>
+      <h3 class="section-title" data-i18n="sections.experience">Professional Experience</h3>
       <div class="timeline" role="list">
-      <div class="experience-item" data-date="Jul 2024 — Present">
+      <div class="experience-item" data-date="Jul 2024 — Present" data-i18n-attr="data-date" data-i18n="experiences.0.date">
         <div class="experience-header">
           <img class="company-logo color white-bg" src="assets/logos/ingram-micro.jpg" alt="Ingram Micro logo" />
           <div>
-            <h4>QA Engineer</h4>
-            <span class="experience-meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
+            <h4 data-i18n="experiences.0.role">QA Engineer</h4>
+            <span class="experience-meta" data-i18n="experiences.0.company_meta">Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain</span>
           </div>
         </div>
-        <p class="muted-note">Ingram Micro is a global technology distributor and Xvantage is their digital platform for cloud and IT solutions.</p>
+        <p class="muted-note" data-i18n="experiences.0.note">Ingram Micro is a global technology distributor and Xvantage is their digital platform for cloud and IT solutions.</p>
         <ul>
-          <li>Implemented a full automation framework for ETL testing, integrating it into CI/CD pipelines and regression suites — resulting in fewer production incidents and improved release stability.</li>
-          <li>Performed end-to-end testing for enterprise subscription management platforms and reseller provisioning systems, increasing release confidence for key deployments.</li>
-          <li>Designed and executed ETL validation and automation initiatives focused on data quality, transformation testing, and backend verification.</li>
-          <li>Accelerated test creation and analysis by adopting AI-assisted workflows and intelligent agent-based tooling.</li>
-          <li>Executed backend, API, integration, and enterprise-level system testing across multiple internal platform components.</li>
-          <li>Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency across releases.</li>
+          <li data-i18n="experiences.0.bullets.0">Implemented a full automation framework for ETL testing, integrating it into CI/CD pipelines and regression suites — resulting in fewer production incidents and improved release stability.</li>
+          <li data-i18n="experiences.0.bullets.1">Performed end-to-end testing for enterprise subscription management platforms and reseller provisioning systems, increasing release confidence for key deployments.</li>
+          <li data-i18n="experiences.0.bullets.2">Designed and executed ETL validation and automation initiatives focused on data quality, transformation testing, and backend verification.</li>
+          <li data-i18n="experiences.0.bullets.3">Accelerated test creation and analysis by adopting AI-assisted workflows and intelligent agent-based tooling.</li>
+          <li data-i18n="experiences.0.bullets.4">Executed backend, API, integration, and enterprise-level system testing across multiple internal platform components.</li>
+          <li data-i18n="experiences.0.bullets.5">Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency across releases.</li>
         </ul>
       </div>
-      <div class="experience-item" data-date="Aug 2022 — Feb 2024">
+      <div class="experience-item" data-date="Aug 2022 — Feb 2024" data-i18n-attr="data-date" data-i18n="experiences.1.date">
         <div class="experience-header">
           <img class="company-logo color" src="assets/logos/rootstrap.jpg" alt="Rootstrap logo" />
           <div>
-            <h4>Quality Assurance Engineer</h4>
-            <span class="experience-meta">Rootstrap - Caramel | August 2022 - February 2024</span>
+            <h4 data-i18n="experiences.1.role">Quality Assurance Engineer</h4>
+            <span class="experience-meta" data-i18n="experiences.1.company_meta">Rootstrap - Caramel | August 2022 - February 2024</span>
           </div>
         </div>
-        <p class="muted-note">Rootstrap is a software development agency; Caramel is a fintech platform for car buying and financing.</p>
+        <p class="muted-note" data-i18n="experiences.1.note">Rootstrap is a software development agency; Caramel is a fintech platform for car buying and financing.</p>
         <ul>
-          <li>Collaborated on a large-scale web and mobile platform with multiple third-party integrations.</li>
-          <li>Performed frontend, backend, API, and mobile testing across Android and iOS applications.</li>
-          <li>Worked within Agile environments alongside cross-functional development teams.</li>
-          <li>Supported production issue resolution, operational maintenance, and quality validation processes.</li>
+          <li data-i18n="experiences.1.bullets.0">Collaborated on a large-scale web and mobile platform with multiple third-party integrations.</li>
+          <li data-i18n="experiences.1.bullets.1">Performed frontend, backend, API, and mobile testing across Android and iOS applications.</li>
+          <li data-i18n="experiences.1.bullets.2">Worked within Agile environments alongside cross-functional development teams.</li>
+          <li data-i18n="experiences.1.bullets.3">Supported production issue resolution, operational maintenance, and quality validation processes.</li>
         </ul>
       </div>
-      <div class="experience-item" data-date="Oct 2020 — Aug 2022">
+      <div class="experience-item" data-date="Oct 2020 — Aug 2022" data-i18n-attr="data-date" data-i18n="experiences.2.date">
         <div class="experience-header">
           <img class="company-logo" src="assets/logos/fligoo.jpg" alt="Fligoo logo" />
           <div>
-            <h4>Quality Assurance Engineer</h4>
-            <span class="experience-meta">Fligoo - Broadridge | October 2020 - August 2022</span>
+            <h4 data-i18n="experiences.2.role">Quality Assurance Engineer</h4>
+            <span class="experience-meta" data-i18n="experiences.2.company_meta">Fligoo - Broadridge | October 2020 - August 2022</span>
           </div>
         </div>
-        <p class="muted-note">Fligoo is an AI/analytics company; Broadridge is a global fintech leader in investor communications and technology.</p>
+        <p class="muted-note" data-i18n="experiences.2.note">Fligoo is an AI/analytics company; Broadridge is a global fintech leader in investor communications and technology.</p>
         <ul>
-          <li>Managed estimations, QA reporting, planning activities, and testing documentation.</li>
-          <li>Worked closely with Product Owners and Project Managers on analytical and QA initiatives.</li>
-          <li>Supervised deployments and testing activities in production environments.</li>
-          <li>Participated in enterprise validation processes and quality assurance operations.</li>
-          <li>Used Cypress to automate frontend validations and UI testing for web applications.</li>
+          <li data-i18n="experiences.2.bullets.0">Managed estimations, QA reporting, planning activities, and testing documentation.</li>
+          <li data-i18n="experiences.2.bullets.1">Worked closely with Product Owners and Project Managers on analytical and QA initiatives.</li>
+          <li data-i18n="experiences.2.bullets.2">Supervised deployments and testing activities in production environments.</li>
+          <li data-i18n="experiences.2.bullets.3">Participated in enterprise validation processes and quality assurance operations.</li>
+          <li data-i18n="experiences.2.bullets.4">Used Cypress to automate frontend validations and UI testing for web applications.</li>
         </ul>
       </div>
       <div class="show-more-wrap">
-        <button class="show-more-btn btn btn--primary" id="showOlderBtn" aria-expanded="false">Show older experience</button>
+        <button class="show-more-btn btn btn--primary" id="showOlderBtn" aria-expanded="false" data-i18n="buttons.show_older_experience">Show older experience</button>
       </div>
 
       <div id="olderExperiences" class="is-hidden">
-        <div class="experience-item" data-date="Oct 2019 — Oct 2020">
+        <div class="experience-item" data-date="Oct 2019 — Oct 2020" data-i18n-attr="data-date" data-i18n="experiences.3.date">
           <div class="experience-header">
             <img class="company-logo" src="assets/logos/globant.jpeg" alt="Globant logo" />
             <div>
-              <h4>Quality Analyst -> Quality Assurance Lead</h4>
-              <span class="experience-meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
+              <h4 data-i18n="experiences.3.role">Quality Analyst -> Quality Assurance Lead</h4>
+              <span class="experience-meta" data-i18n="experiences.3.company_meta">Globant | Ernst & Young · Oct 2019 - Oct 2020</span>
             </div>
           </div>
-          <p class="muted-note">QA for a major financial services engagement with Ernst & Young. Began as Quality Analyst and was promoted to Quality Assurance Lead, combining hands-on testing with client reporting and team coordination.</p>
+          <p class="muted-note" data-i18n="experiences.3.note">QA for a major financial services engagement with Ernst & Young. Began as Quality Analyst and was promoted to Quality Assurance Lead, combining hands-on testing with client reporting and team coordination.</p>
           <ul>
-            <li>Promoted from Quality Analyst to Quality Assurance Lead; managed estimations, reporting, and QA planning across project streams.</li>
-            <li>Presented test findings and status to client stakeholders and coordinated cross-team testing strategy.</li>
-            <li>Designed and executed test cases (exploratory, smoke, regression) validating critical financial workflows.</li>
-            <li>Mentored testing analysts, delegated tasks, and improved QA processes to increase delivery reliability.</li>
-            <li>Worked with development teams to triage defects, verify fixes, and reduce rework during releases.</li>
+            <li data-i18n="experiences.3.bullets.0">Promoted from Quality Analyst to Quality Assurance Lead; managed estimations, reporting, and QA planning across project streams.</li>
+            <li data-i18n="experiences.3.bullets.1">Presented test findings and status to client stakeholders and coordinated cross-team testing strategy.</li>
+            <li data-i18n="experiences.3.bullets.2">Designed and executed test cases (exploratory, smoke, regression) validating critical financial workflows.</li>
+            <li data-i18n="experiences.3.bullets.3">Mentored testing analysts, delegated tasks, and improved QA processes to increase delivery reliability.</li>
+            <li data-i18n="experiences.3.bullets.4">Worked with development teams to triage defects, verify fixes, and reduce rework during releases.</li>
           </ul>
         </div>
 
-        <div class="experience-item" data-date="Feb 2019 — Aug 2019">
+        <div class="experience-item" data-date="Feb 2019 — Aug 2019" data-i18n-attr="data-date" data-i18n="experiences.4.date">
           <div class="experience-header">
             <img class="company-logo color white-bg" src="assets/logos/claro.svg" alt="Claro logo" />
             <div>
-              <h4>Testing Analyst</h4>
-              <span class="experience-meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
+              <h4 data-i18n="experiences.4.role">Testing Analyst</h4>
+              <span class="experience-meta" data-i18n="experiences.4.company_meta">COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019</span>
             </div>
           </div>
-          <p class="muted-note">Testing analyst for the customer service software development team supporting Claro in Argentina, Uruguay and Paraguay; provided analysis and execution of manual and automated tests to ensure release quality.</p>
+          <p class="muted-note" data-i18n="experiences.4.note">Testing analyst for the customer service software development team supporting Claro in Argentina, Uruguay and Paraguay; provided analysis and execution of manual and automated tests to ensure release quality.</p>
           <ul>
-            <li>Executed manual and automated tests for customer service platforms.</li>
-            <li>Provided QA support across regional teams (Argentina, Uruguay, Paraguay).</li>
-            <li>Assisted in test analysis, defect reporting and verification.</li>
+            <li data-i18n="experiences.4.bullets.0">Executed manual and automated tests for customer service platforms.</li>
+            <li data-i18n="experiences.4.bullets.1">Provided QA support across regional teams (Argentina, Uruguay, Paraguay).</li>
+            <li data-i18n="experiences.4.bullets.2">Assisted in test analysis, defect reporting and verification.</li>
           </ul>
         </div>
       </div>
@@ -178,7 +179,7 @@
 
     <!-- TECHNICAL SKILLS -->
     <section id="technical-skills" class="main-section">
-      <h3 class="section-title">Technical Skills</h3>
+      <h3 class="section-title" data-i18n="sections.skills">Technical Skills</h3>
       <div class="top-skills" id="topSkillsRow">
         <div class="skill-badge">Python</div>
         <div class="skill-badge">SQL / PL/SQL</div>
@@ -198,13 +199,13 @@
       </div>
 
       <div class="show-more-wrap">
-        <button type="button" class="show-more-btn btn btn--primary" id="showMoreBtn" aria-expanded="false">Show full skills</button>
+        <button type="button" class="show-more-btn btn btn--primary" id="showMoreBtn" aria-expanded="false" data-i18n="buttons.show_more_skills">Show full skills</button>
       </div>
 
       <div id="fullSkills" class="is-hidden">
         <div class="grouped-skills">
           <div class="expertise-category">
-            <div class="expertise-category-title">Automation</div>
+            <div class="expertise-category-title" data-i18n="skills.categories.automation">Automation</div>
             <div class="mini-skill-cards">
               <span class="mini-skill-card">ETL Validation</span>
               <span class="mini-skill-card">Data Quality Testing</span>
@@ -217,7 +218,7 @@
           </div>
 
           <div class="expertise-category">
-            <div class="expertise-category-title">Languages</div>
+            <div class="expertise-category-title" data-i18n="skills.categories.languages">Languages</div>
             <div class="mini-skill-cards">
               <span class="mini-skill-card">Python</span>
               <span class="mini-skill-card">SQL</span>
@@ -228,7 +229,7 @@
           </div>
 
           <div class="expertise-category">
-            <div class="expertise-category-title">Tools</div>
+            <div class="expertise-category-title" data-i18n="skills.categories.tools">Tools</div>
             <div class="mini-skill-cards">
               <span class="mini-skill-card">Playwright</span>
               <span class="mini-skill-card">Cypress</span>
@@ -243,7 +244,7 @@
           </div>
 
           <div class="expertise-category">
-            <div class="expertise-category-title">Methodologies</div>
+            <div class="expertise-category-title" data-i18n="skills.categories.methodologies">Methodologies</div>
             <div class="mini-skill-cards">
               <span class="mini-skill-card">Agile QA Collaboration</span>
               <span class="mini-skill-card">Enterprise QA Operations</span>
@@ -255,7 +256,7 @@
           </div>
 
           <div class="expertise-category wide">
-            <div class="expertise-category-title">QA Skills</div>
+            <div class="expertise-category-title" data-i18n="skills.categories.qa">QA Skills</div>
             <div class="mini-skill-cards">
               <span class="mini-skill-card">Manual Testing</span>
               <span class="mini-skill-card">Test Case Creation</span>
@@ -283,22 +284,22 @@
 
     <!-- PROFESSIONAL DEVELOPMENT -->
     <section id="professional-development" class="main-section">
-      <h3 class="section-title">Professional Development</h3>
-      <p class="muted-note mt-neg-8 mb-18">These are current, ongoing learning topics and courses I'm actively studying.</p>
+      <h3 class="section-title" data-i18n="sections.professional_development">Professional Development</h3>
+      <p class="muted-note mt-neg-8 mb-18" data-i18n="sections.professional_development_note">These are current, ongoing learning topics and courses I'm actively studying.</p>
       <div class="expertise">
-        <div class="expertise-item">Advanced Python for Test Automation</div>
-        <div class="expertise-item">Playwright Automation Frameworks</div>
-        <div class="expertise-item">Cypress End-to-End Testing</div>
-        <div class="expertise-item">AI-driven QA Automation</div>
-        <div class="expertise-item">Automation Architecture & CI/CD</div>
+        <div class="expertise-item" data-i18n="professional_development.items.0">Advanced Python for Test Automation</div>
+        <div class="expertise-item" data-i18n="professional_development.items.1">Playwright Automation Frameworks</div>
+        <div class="expertise-item" data-i18n="professional_development.items.2">Cypress End-to-End Testing</div>
+        <div class="expertise-item" data-i18n="professional_development.items.3">AI-driven QA Automation</div>
+        <div class="expertise-item" data-i18n="professional_development.items.4">Automation Architecture & CI/CD</div>
       </div>
     </section>
     <div class="section-divider"></div>
 
     <!-- INTERESTS -->
     <section id="interests" class="main-section">
-      <h3 class="section-title">Interested In</h3>
-      <p>
+      <h3 class="section-title" data-i18n="sections.interests">Interested In</h3>
+      <p data-i18n="sections.interests_note">
         Looking for opportunities focused on modern QA practices,
         automation engineering, AI-assisted testing, backend quality assurance,
         and scalable enterprise validation processes.
@@ -317,8 +318,8 @@
     
     <!-- RECOMMENDATIONS -->
     <section id="recommendations" class="main-section">
-      <h3 class="section-title">Recommendations</h3>
-      <p class="muted-note mt-neg-8 mb-18">What Colleagues Say</p>
+      <h3 class="section-title" data-i18n="sections.recommendations">Recommendations</h3>
+      <p class="muted-note mt-neg-8 mb-18" data-i18n="recommendations_subtitle">What Colleagues Say</p>
       <div id="recommendationsList">
         <div class="recommendations-wrapper">
           <button class="rec-nav prev" aria-label="Previous recommendation">‹</button>
@@ -382,19 +383,19 @@
 
     <!-- EDUCATION -->
     <section id="education" class="main-section">
-      <h3 class="section-title">Education & Certifications</h3>
+      <h3 class="section-title" data-i18n="sections.education">Education & Certifications</h3>
       <div class="edu-grid">
         <div class="edu-card">
           <div class="accent"></div>
-          <h4>Software and Information Systems Engineering</h4>
-          <span class="experience-meta">Universidad Tecnológica Nacional (UTN-FRC)</span>
-          <p class="edu-note"><em>Completed 4th year; degree not completed.</em></p>
+          <h4 data-i18n="education.items.0.degree">Software and Information Systems Engineering</h4>
+          <span class="experience-meta" data-i18n="education.items.0.institution">Universidad Tecnológica Nacional (UTN-FRC)</span>
+          <p class="edu-note" data-i18n="education.items.0.note"><em>Completed 4th year; degree not completed.</em></p>
         </div>
         <div class="edu-card">
           <div class="accent"></div>
-          <a class="cert-badge" href="https://scrummanager.com/website/c/profile/member.php?id=39831" target="_blank" rel="noopener">Certificate</a>
-          <h4>Certified Product Owner</h4>
-          <p>Scrum Manager Credential</p>
+          <a class="cert-badge" href="https://scrummanager.com/website/c/profile/member.php?id=39831" target="_blank" rel="noopener" data-i18n="education.items.1.certificate_label">Certificate</a>
+          <h4 data-i18n="education.items.1.degree">Certified Product Owner</h4>
+          <p data-i18n="education.items.1.institution">Scrum Manager Credential</p>
         </div>
       </div>
     </section>
@@ -402,8 +403,8 @@
 
     <!-- SCHEDULING -->
     <section id="schedule" class="main-section">
-      <h3 class="section-title">Schedule a Meeting</h3>
-      <p class="muted-note mt-neg-8 mb-12">See my availability and create a Google Calendar event.</p>
+      <h3 class="section-title" data-i18n="sections.schedule">Schedule a Meeting</h3>
+      <p class="muted-note mt-neg-8 mb-12" data-i18n="schedule_note">See my availability and create a Google Calendar event.</p>
       <div class="schedule-row">
         <!-- Google Calendar Appointment Scheduling (full-width card) -->
         <div class="schedule-iframe-wrapper">

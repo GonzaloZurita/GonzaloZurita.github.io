@@ -1,0 +1,148 @@
+{
+  "hero": {
+    "name": "Gonzalo Zurita",
+    "role": "QA Automation Engineer",
+    "industries": ["FinTech", "Plataformas Cloud Empresariales"],
+    "description": "Ingeniero de Automatización QA con más de 5 años especializado en FinTech y plataformas cloud empresariales. Experto en construir automatización escalable y pipelines de validación CI/CD, pruebas de API y backend, y verificación de datos/ETL. Diseño estrategias de QA orientadas a datos y utilizo flujos de trabajo automatizados y asistidos por IA para reducir defectos, acelerar releases y mejorar la fiabilidad de sistemas empresariales complejos."
+  },
+  "stack": ["Python", "Automatización de pruebas", "Playwright", "Pruebas de API y Backend", "CI/CD", "Validaciones ETL", "Desarrollo asistido por IA", "Automatización agentica"],
+  "contact": {
+    "email": "gonzalo.zurita92@gmail.com",
+    "phone": "+34 625 177 677",
+    "location": "Barcelona, España",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "sections": {
+    "experience": "Experiencia Profesional",
+    "skills": "Habilidades Técnicas",
+    "professional_development": "Formación Profesional",
+    "interests": "Intereses profesionales",
+    "professional_development_note": "Estos son temas y cursos de aprendizaje actuales y en curso que estoy estudiando activamente.",
+    "interests_note": "Buscando oportunidades centradas en prácticas modernas de QA, ingeniería de automatización, pruebas asistidas por IA, aseguramiento de la calidad de backend y procesos de validación empresariales escalables.",
+    "recommendations": "Recomendaciones",
+    "education": "Educación y Certificaciones",
+    "schedule": "Reservar una reunión"
+  },
+  "nav": {
+    "experience": "Experiencia",
+    "skills": "Habilidades",
+    "learning": "Formación",
+    "interests": "Intereses profesionales",
+    "recommendations": "Recomendaciones",
+    "education": "Educación"
+  },
+  "skills": {
+    "categories": {
+      "automation": "Automatización",
+      "languages": "Lenguajes",
+      "tools": "Herramientas",
+      "methodologies": "Metodologías",
+      "qa": "Habilidades QA"
+    }
+  },
+  "recommendations_subtitle": "Lo que dicen los colegas",
+  "schedule_note": "Consulta mi disponibilidad y crea un evento de Google Calendar.",
+  "buttons": {
+    "download_pdf": "Descargar PDF",
+    "schedule_meeting": "Reservar reunión",
+    "show_more_skills": "Mostrar todas las habilidades",
+    "show_less": "Mostrar menos",
+    "show_older_experience": "Mostrar experiencia anterior",
+    "show_less_experience": "Mostrar menos"
+  },
+  "experiences": [
+    {
+      "date": "Jul 2024 — Presente",
+      "role": "QA Engineer",
+      "company_meta": "Ingram Micro - Xvantage | Julio 2024 - Presente | Barcelona, España",
+      "note": "Ingram Micro es un distribuidor tecnológico global y Xvantage es su plataforma digital para soluciones en la nube y TI.",
+      "bullets": [
+        "Implementé un framework completo de automatización para pruebas ETL, integrándolo en pipelines CI/CD y suites de regresión — lo que resultó en menos incidentes en producción y mayor estabilidad en los releases.",
+        "Realicé pruebas end-to-end para plataformas de gestión de suscripciones empresariales y sistemas de aprovisionamiento de revendedores, aumentando la confianza en los despliegues clave.",
+        "Diseñé y ejecuté iniciativas de validación ETL y automatización enfocadas en la calidad de datos, pruebas de transformación y verificación de backend.",
+        "Aceleré la creación y análisis de pruebas adoptando flujos de trabajo asistidos por IA y herramientas agent-based.",
+        "Ejecución de pruebas de backend, API, integración y a nivel empresarial en múltiples componentes internos de la plataforma.",
+        "Colaboré con equipos ágiles cross-funcionales para identificar oportunidades de automatización y mejorar la eficiencia de QA en los releases."
+      ]
+    },
+    {
+      "date": "Ago 2022 — Feb 2024 · Unpress",
+      "role": "QA Engineer / Product Owner",
+      "company_meta": "Rootstrap - Caramel & Unpress | Agosto 2022 - Febrero 2024",
+      "note": "Rootstrap es una agencia de desarrollo; Caramel y Unpress son plataformas con las que trabajé durante este periodo.",
+      "bullets": [
+        "Actué como QA Engineer y Product Owner para Unpress, coordinando requisitos de producto y entregables de QA.",
+        "Lideré esfuerzos de QA para funcionalidades web y móviles: definí criterios de aceptación, diseñé estrategias de prueba y creé escenarios de automatización integrados en pipelines CI/CD.",
+        "Colaboré con equipos cross-funcionales, prioricé el backlog y traduje objetivos de producto en tareas verificables para ingeniería.",
+        "Realicé pruebas de frontend, backend, API y mobile en Android e iOS, y apoyé en la triage y resolución de incidencias en producción.",
+        "Mentoricé a testers junior y mejoré los flujos de trabajo de QA, lo que permitió ciclos de release más rápidos y mayor confianza en los lanzamientos."
+      ]
+    },
+    {
+      "date": "Oct 2020 — Ago 2022",
+      "role": "QA Engineer",
+      "company_meta": "Fligoo - Broadridge | Octubre 2020 - Agosto 2022",
+      "note": "Fligoo es una empresa de IA/analítica; Broadridge es un líder fintech global en comunicaciones e infraestructura para inversores.",
+      "bullets": [
+        "Gestioné estimaciones, reportes de QA, planificación y documentación de pruebas.",
+        "Colaboré estrechamente con Product Owners y Project Managers en iniciativas analíticas y de QA.",
+        "Supervisé despliegues y actividades de testing en entornos de producción.",
+        "Participé en procesos de validación empresarial y operaciones de aseguramiento de calidad.",
+        "Usé Cypress para automatizar validaciones frontend y pruebas UI para aplicaciones web."
+      ]
+    },
+    {
+      "date": "Oct 2019 — Oct 2020",
+      "role": "QA Analyst -> QA Lead",
+      "company_meta": "Globant | Ernst & Young · Oct 2019 - Oct 2020",
+      "note": "QA para un importante engagement de servicios financieros con Ernst & Young. Comencé como Quality Analyst y fui promovido a Quality Assurance Lead, combinando pruebas con reporting y coordinación con el cliente.",
+      "bullets": [
+        "Promovido de Quality Analyst a Quality Assurance Lead; gestioné estimaciones, reportes y planificación de QA a través de streams del proyecto.",
+        "Presenté hallazgos de pruebas y estado a stakeholders del cliente y coordiné la estrategia de testing entre equipos.",
+        "Diseñé y ejecuté casos de prueba (exploratorios, smoke, regresión) validando workflows críticos financieros.",
+        "Mentoricé a analistas de testing, delegué tareas y mejoré procesos de QA para aumentar la fiabilidad en la entrega.",
+        "Trabajé con equipos de desarrollo para priorizar defectos, verificar correcciones y reducir retrabajo durante releases."
+      ]
+    },
+    {
+      "date": "Feb 2019 — Ago 2019",
+      "role": "Testing Analyst",
+      "company_meta": "COHEN Sistemas | Claro Argentina · Feb 2019 - Ago 2019",
+      "note": "Analista de testing para el equipo de software de atención al cliente que soporta Claro en Argentina, Uruguay y Paraguay; proporcioné análisis y ejecución de pruebas manuales y automatizadas para asegurar la calidad de releases.",
+      "bullets": [
+        "Realicé pruebas manuales y automatizadas para plataformas de atención al cliente.",
+        "Proporcioné soporte QA a equipos regionales (Argentina, Uruguay, Paraguay).",
+        "Asistí en análisis de pruebas, reporte de defectos y verificación."
+      ]
+    }
+  ],
+  "placeholders": {
+    "select_appointment": "Seleccione una hora de cita"
+  }
+  ,
+  "education": {
+    "items": [
+      {
+        "degree": "Ingeniería de Sistemas y Software",
+        "institution": "Universidad Tecnológica Nacional (UTN-FRC)",
+        "note": "Completado 4º año; título no finalizado."
+      },
+      {
+        "certificate_label": "Certificado",
+        "degree": "Certified Product Owner",
+        "institution": "Scrum Manager Credential"
+      }
+    ]
+  }
+  ,
+  "professional_development": {
+    "items": [
+      "Python avanzado para automatización de pruebas",
+      "Frameworks de automatización con Playwright",
+      "Pruebas end-to-end con Cypress",
+      "Automatización QA asistida por IA",
+      "Arquitectura de automatización y CI/CD"
+    ]
+  }
+}

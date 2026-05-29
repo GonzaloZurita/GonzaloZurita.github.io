@@ -1,0 +1,148 @@
+{
+  "hero": {
+    "name": "Gonzalo Zurita",
+    "role": "QA Automation Engineer",
+    "industries": ["FinTech", "Enterprise Cloud Platforms"],
+    "description": "QA Automation Engineer with 5+ years specializing in FinTech and enterprise cloud platforms. Experienced in building scalable automation and CI/CD validation pipelines, API and backend testing, and data/ETL verification. I design data-driven QA strategies and leverage automation and AI-assisted workflows to reduce defects, speed releases, and improve reliability for complex enterprise systems."
+  },
+  "stack": ["Python", "Test Automation", "Playwright", "API & Backend Testing", "CI/CD", "ETL Validations", "AI-assisted Development", "Agentic Test Automation"],
+  "contact": {
+    "email": "gonzalo.zurita92@gmail.com",
+    "phone": "+34 625 177 677",
+    "location": "Barcelona, Spain",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "sections": {
+    "experience": "Professional Experience",
+    "skills": "Technical Skills",
+    "professional_development": "Professional Development",
+    "interests": "Professional Interests",
+    "professional_development_note": "These are current, ongoing learning topics and courses I'm actively studying.",
+    "interests_note": "Looking for opportunities focused on modern QA practices, automation engineering, AI-assisted testing, backend quality assurance, and scalable enterprise validation processes.",
+    "recommendations": "Recommendations",
+    "education": "Education & Certifications",
+    "schedule": "Schedule a Meeting"
+  },
+  "nav": {
+    "experience": "Experience",
+    "skills": "Skills",
+    "learning": "Learning",
+    "interests": "Professional Interests",
+    "recommendations": "Recommendations",
+    "education": "Education"
+  },
+  "skills": {
+    "categories": {
+      "automation": "Automation",
+      "languages": "Languages",
+      "tools": "Tools",
+      "methodologies": "Methodologies",
+      "qa": "QA Skills"
+    }
+  },
+  "recommendations_subtitle": "What Colleagues Say",
+  "schedule_note": "See my availability and create a Google Calendar event.",
+  "buttons": {
+    "download_pdf": "Download PDF",
+    "schedule_meeting": "Schedule a Meeting",
+    "show_more_skills": "Show full skills",
+    "show_less": "Show less",
+    "show_older_experience": "Show older experience",
+    "show_less_experience": "Show less"
+  },
+  "experiences": [
+    {
+      "date": "Jul 2024 — Present",
+      "role": "QA Engineer",
+      "company_meta": "Ingram Micro - Xvantage | July 2024 - Present | Barcelona, Spain",
+      "note": "Ingram Micro is a global technology distributor and Xvantage is their digital platform for cloud and IT solutions.",
+      "bullets": [
+        "Implemented a full automation framework for ETL testing, integrating it into CI/CD pipelines and regression suites — resulting in fewer production incidents and improved release stability.",
+        "Performed end-to-end testing for enterprise subscription management platforms and reseller provisioning systems, increasing release confidence for key deployments.",
+        "Designed and executed ETL validation and automation initiatives focused on data quality, transformation testing, and backend verification.",
+        "Accelerated test creation and analysis by adopting AI-assisted workflows and intelligent agent-based tooling.",
+        "Executed backend, API, integration, and enterprise-level system testing across multiple internal platform components.",
+        "Collaborated with cross-functional Agile teams to identify automation opportunities and improve QA efficiency across releases."
+      ]
+    },
+    {
+      "date": "Aug 2022 — Feb 2024 · Unpress",
+      "role": "QA Engineer / Product Owner",
+      "company_meta": "Rootstrap - Caramel & Unpress | August 2022 - February 2024",
+      "note": "Rootstrap is a software development agency; Caramel and Unpress are client-facing platforms I contributed to during this period.",
+      "bullets": [
+        "Served as QA Engineer and Product Owner for Unpress, coordinating product requirements and QA deliverables.",
+        "Led QA efforts for web and mobile features: defined acceptance criteria, designed test strategies, and created automation scenarios integrated into CI/CD pipelines.",
+        "Collaborated with cross-functional teams, prioritized backlog items, and translated product goals into verifiable engineering tasks.",
+        "Performed frontend, backend, API, and mobile testing across Android and iOS, and supported production issue triage and resolution.",
+        "Mentored junior testers and improved QA workflows, enabling faster release cycles and greater release confidence."
+      ]
+    },
+    {
+      "date": "Oct 2020 — Aug 2022",
+      "role": "QA Engineer",
+      "company_meta": "Fligoo - Broadridge | October 2020 - August 2022",
+      "note": "Fligoo is an AI/analytics company; Broadridge is a global fintech leader in investor communications and technology.",
+      "bullets": [
+        "Managed estimations, QA reporting, planning activities, and testing documentation.",
+        "Worked closely with Product Owners and Project Managers on analytical and QA initiatives.",
+        "Supervised deployments and testing activities in production environments.",
+        "Participated in enterprise validation processes and quality assurance operations.",
+        "Used Cypress to automate frontend validations and UI testing for web applications."
+      ]
+    },
+    {
+      "date": "Oct 2019 — Oct 2020",
+      "role": "QA Analyst -> QA Lead",
+      "company_meta": "Globant | Ernst & Young · Oct 2019 - Oct 2020",
+      "note": "QA for a major financial services engagement with Ernst & Young. Began as Quality Analyst and was promoted to Quality Assurance Lead, combining hands-on testing with client reporting and team coordination.",
+      "bullets": [
+        "Promoted from Quality Analyst to Quality Assurance Lead; managed estimations, reporting, and QA planning across project streams.",
+        "Presented test findings and status to client stakeholders and coordinated cross-team testing strategy.",
+        "Designed and executed test cases (exploratory, smoke, regression) validating critical financial workflows.",
+        "Mentored testing analysts, delegated tasks, and improved QA processes to increase delivery reliability.",
+        "Worked with development teams to triage defects, verify fixes, and reduce rework during releases."
+      ]
+    },
+    {
+      "date": "Feb 2019 — Aug 2019",
+      "role": "Testing Analyst",
+      "company_meta": "COHEN Sistemas | Claro Argentina · Feb 2019 - Aug 2019",
+      "note": "Testing analyst for the customer service software development team supporting Claro in Argentina, Uruguay and Paraguay; provided analysis and execution of manual and automated tests to ensure release quality.",
+      "bullets": [
+        "Executed manual and automated tests for customer service platforms.",
+        "Provided QA support across regional teams (Argentina, Uruguay, Paraguay).",
+        "Assisted in test analysis, defect reporting and verification."
+      ]
+    }
+  ],
+  "placeholders": {
+    "select_appointment": "Select an appointment time"
+  }
+  ,
+  "education": {
+    "items": [
+      {
+        "degree": "Software and Information Systems Engineering",
+        "institution": "Universidad Tecnológica Nacional (UTN-FRC)",
+        "note": "Completed 4th year; degree not completed."
+      },
+      {
+        "certificate_label": "Certificate",
+        "degree": "Certified Product Owner",
+        "institution": "Scrum Manager Credential"
+      }
+    ]
+  }
+  ,
+  "professional_development": {
+    "items": [
+      "Advanced Python for Test Automation",
+      "Playwright Automation Frameworks",
+      "Cypress End-to-End Testing",
+      "AI-driven QA Automation",
+      "Automation Architecture & CI/CD"
+    ]
+  }
+}

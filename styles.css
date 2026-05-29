@@ -866,6 +866,47 @@ footer{
   border-color: rgba(255,255,255,0.06);
 }
 
+/* Language toggle (EN/ES) floating button placed above the theme toggle */
+.lang-toggle {
+  position: fixed;
+  top: 18px; /* overridden by JS based on header height */
+  right: 32px;
+  z-index: 91;
+  background: #111c34; /* match .toggle-mode background */
+  color: #e6f6ff;
+  border: 1px solid rgba(56,189,248,0.28); /* match .toggle-mode border */
+  border-radius: 999px;
+  padding: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow:0 2px 8px rgba(2,6,23,0.12); /* closer to .toggle-mode */
+  transition: box-shadow 0.18s ease, transform 0.08s ease;
+}
+.lang-toggle:hover{ box-shadow: 0 8px 22px rgba(2,6,23,0.12); transform: translateY(-1px); }
+.lang-toggle .lang-side {
+  padding: 6px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  min-width: 28px;
+  text-align: center;
+  font-weight:600;
+  color: rgba(230,246,255,0.9);
+}
+.lang-toggle .lang-divider{ color: rgba(230,246,255,0.45); font-weight:600; }
+.lang-toggle .lang-side.active{ background: #38bdf8; color: #072033; }
+
+@media(max-width:900px){
+  /* keep the language toggle visible and compact on mobile */
+  .lang-toggle{ right:18px; top:8px; padding:4px; font-size:0.82rem; gap:6px; }
+  .lang-toggle .lang-side{ padding:5px 6px; min-width:24px; }
+}
+
+/* Bump theme toggle to avoid overlap with language toggle (default) */
+.toggle-mode { top: 88px; }
+
 /* Hide download buttons in light mode as requested */
 body.light-mode .download-pdf-btn { display:none !important; }
 
@@ -1248,7 +1289,7 @@ body.light-mode .edu-card .experience-meta{ color:#475569; }
     line-height:1.25 !important;
   }
   /* hide UI chrome */
-  .sticky-header, .toggle-mode, .back-to-top, .download-pdf-btn, .schedule-btn, .show-more-wrap {
+  .sticky-header, .toggle-mode, .lang-toggle, #langToggleBtn, .back-to-top, .download-pdf-btn, .schedule-btn, .show-more-wrap {
     display:none !important;
   }
   /* simplify section visuals */
