@@ -86,6 +86,7 @@
         <button id="addExperienceBtn" class="btn btn--ghost" type="button" title="Add experience">Add</button>
       </div>
       <div class="timeline" role="list">
+      <!-- SNIPPET-KEY: #experience -->
       <div class="experience-item" data-date="Jul 2024 — Present" data-i18n-attr="data-date" data-i18n="experiences.0.date">
         <div class="experience-header">
           <img class="company-logo color white-bg" src="assets/logos/ingram-micro.jpg" alt="Ingram Micro logo" />
@@ -202,6 +203,7 @@
     <section id="technical-skills" class="main-section">
       <h3 class="section-title" data-i18n="sections.skills">Technical Skills</h3>
       <div class="top-skills" id="topSkillsRow">
+        <!-- SNIPPET-KEY: #technical-skills -->
         <div class="skill-badge">Python</div>
         <div class="skill-badge">SQL / PL/SQL</div>
         <div class="skill-badge">Playwright</div>
@@ -315,12 +317,41 @@
         </div>
       </div>
     </div>
+    
+      <!-- Add Item Menu: left-nav + right-content modal -->
+      <div id="addItemMenu" class="modal-overlay is-hidden" aria-hidden="true">
+        <div class="modal modal--three-col" role="dialog" aria-modal="true" aria-labelledby="addItemMenuTitle">
+          <div class="modal-header">
+            <h4 id="addItemMenuTitle">Builder</h4>
+          </div>
+          <div class="modal-inner" style="display:flex; gap:18px; align-items:stretch;">
+            <nav id="addItemList" class="add-item-list" style="flex:0 0 220px; padding:18px; border-right:1px solid rgba(255,255,255,0.03);">
+              <button class="add-item-option" data-section="experience">Experience</button>
+              <button class="add-item-option" data-section="technical-skills">Technical Skill</button>
+              <button class="add-item-option" data-section="professional-development">Professional Development</button>
+              <button class="add-item-option" data-section="interests">Interest</button>
+              <button class="add-item-option" data-section="recommendations">Recommendation</button>
+              <button class="add-item-option" data-section="education">Education</button>
+            </nav>
+            <div style="flex:1 1 auto; display:flex; flex-direction:column;">
+              <div style="padding:18px 20px; border-bottom:1px solid rgba(255,255,255,0.03);">
+                <h4 id="addItemFormTitle">Generate creates ready-to-paste HTML snippets and clear instructions — it won't modify your site automatically.</h4>
+              </div>
+              <div id="addItemFormContainer" style="padding:18px; flex:1 1 auto; overflow:auto;"></div>
+              <div class="modal-actions" style="padding:12px 18px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid rgba(255,255,255,0.03);">
+                <button id="addItemCancel" class="btn btn--ghost">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- PROFESSIONAL DEVELOPMENT -->
+      <!-- PROFESSIONAL DEVELOPMENT -->
     <section id="professional-development" class="main-section">
       <h3 class="section-title" data-i18n="sections.professional_development">Professional Development</h3>
       <p class="muted-note mt-neg-8 mb-18" data-i18n="sections.professional_development_note">These are current, ongoing learning topics and courses I'm actively studying.</p>
       <div class="expertise">
+        <!-- SNIPPET-KEY: #professional-development -->
         <div class="expertise-item" data-i18n="professional_development.items.0">Advanced Python for Test Automation</div>
         <div class="expertise-item" data-i18n="professional_development.items.1">Playwright Automation Frameworks</div>
         <div class="expertise-item" data-i18n="professional_development.items.2">Cypress End-to-End Testing</div>
@@ -339,6 +370,7 @@
         and scalable enterprise validation processes.
       </p>
       <div class="interests">
+        <!-- SNIPPET-KEY: #interests -->
         <span>QA Automation</span>
         <span>AI-assisted Testing</span>
         <span>ETL Validation</span>
@@ -358,6 +390,7 @@
         <div class="recommendations-wrapper">
           <button class="rec-nav prev" aria-label="Previous recommendation">‹</button>
           <div class="rec-track">
+          <!-- SNIPPET-KEY: #recommendations -->
           <div class="rec-card active" data-index="0">
             <img class="rec-pic" src="assets/recommendations/Sayani_fouzdar.jpg" alt="Recommender photo" />
             <div>
@@ -419,6 +452,7 @@
     <section id="education" class="main-section">
       <h3 class="section-title" data-i18n="sections.education">Education & Certifications</h3>
       <div class="edu-grid">
+        <!-- SNIPPET-KEY: #education -->
         <div class="edu-card">
           <div class="accent"></div>
           <h4 data-i18n="education.items.0.degree">Software and Information Systems Engineering</h4>
