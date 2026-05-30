@@ -373,20 +373,120 @@ try{
     const formContainer = document.getElementById('addItemFormContainer');
     const addCancel = document.getElementById('addItemCancel');
 
-    function openAddMenu(){ if(!addMenu) return; addMenu.classList.remove('is-hidden'); addMenu.setAttribute('aria-hidden','false'); const first = addMenu.querySelector('button.add-item-option'); if(first) first.focus(); }
-    function closeAddMenu(){ if(!addMenu) return; addMenu.classList.add('is-hidden'); addMenu.setAttribute('aria-hidden','true'); }
+    // Focus trap state for the Add Item Menu
+    let addMenuPrevFocus = null;
+    let addMenuKeydownHandler = null;
+
+    function getFocusableWithin(container){
+      if(!container) return [];
+      const selectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+      return Array.from(container.querySelectorAll(selectors)).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+    }
+
+    function openAddMenu(){
+      if(!addMenu) return;
+      addMenuPrevFocus = document.activeElement;
+      addMenu.classList.remove('is-hidden');
+      addMenu.setAttribute('aria-hidden','false');
+      // focus first interactive element
+      const first = addMenu.querySelector('button.add-item-option');
+      if(first) first.focus();
+
+      // attach keydown handler to trap Tab within the modal and handle Escape
+      addMenuKeydownHandler = function(e){
+        if(e.key === 'Escape'){ e.preventDefault(); closeAddMenu(); return; }
+        if(e.key !== 'Tab') return;
+        const focusable = getFocusableWithin(addMenu);
+        if(focusable.length === 0) { e.preventDefault(); return; }
+        const idx = focusable.indexOf(document.activeElement);
+        if(e.shiftKey){
+          // Shift+Tab: if at first, move to last
+          if(idx === 0 || document.activeElement === addMenu){
+            e.preventDefault(); focusable[focusable.length - 1].focus();
+          }
+        } else {
+          // Tab: if at last, move to first
+          if(idx === focusable.length - 1){
+            e.preventDefault(); focusable[0].focus();
+          }
+        }
+      };
+      addMenu.addEventListener('keydown', addMenuKeydownHandler);
+    }
+
+    function closeAddMenu(){
+      if(!addMenu) return;
+      addMenu.classList.add('is-hidden');
+      addMenu.setAttribute('aria-hidden','true');
+      // remove keydown handler
+      if(addMenuKeydownHandler){ addMenu.removeEventListener('keydown', addMenuKeydownHandler); addMenuKeydownHandler = null; }
+      // restore previous focus
+      try{ if(addMenuPrevFocus && typeof addMenuPrevFocus.focus === 'function') addMenuPrevFocus.focus(); }catch(e){}
+      addMenuPrevFocus = null;
+    }
     if(addCancel){ addCancel.addEventListener('click', function(e){ e.preventDefault(); closeAddMenu(); }); }
 
     // Utility: escape for HTML attributes/content
     const esc = (s)=> (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    // Section -> searchable key mapping so users can find paste locations
+    function getSectionKey(section){
+      const map = {
+        'experience': '#experience',
+        'technical-skills': '#technical-skills',
+        'professional-development': '#professional-development',
+        'interests': '#interests',
+        'recommendations': '#recommendations',
+        'education': '#education'
+      };
+      return map[section] || ('#snippet-' + (section || 'item'));
+    }
+
+    // Friendly, section-specific instructions (HTML) for non-technical users
+    function getSectionInstructions(section, key){
+      const commonSteps = ''+
+        '<ol>'+
+        '<li>Open <strong>index.html</strong> in your editor (e.g. VS Code, Notepad).</li>'+
+        '<li>Use search (Ctrl+F) and find the marker: <code><!-- SNIPPET-KEY: ' + key + ' --></code>.</li>'+
+        '<li>Paste the snippet immediately after that marker so it appears in the correct section.</li>'+
+        '<li>Save the file and refresh your browser to see the new item.</li>'+
+        '</ol>';
+      const map = {
+        'experience': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div class="timeline"&gt;</code> container. Paste it before the <code>&lt;div class="show-more-wrap"&gt;</code> or before <code>&lt;div id="olderExperiences"&gt;</code> so it appears among visible entries.</p>' + commonSteps,
+        'technical-skills': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div id="topSkillsRow"&gt;</code> or the top-skills area. The snippet will add a small badge-like element.</p>' + commonSteps,
+        'professional-development': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div class="expertise"&gt;</code> list. Each item will appear as a learning/topic card.</p>' + commonSteps,
+        'interests': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div class="interests"&gt;</code> area. The snippet will add a short inline tag.</p>' + commonSteps,
+        'recommendations': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div class="rec-track"&gt;</code> carousel. If the carousel uses images, you may want to add a small image afterward, but the text will show without it.</p>' + commonSteps,
+        'education': ''+
+          '<p><strong>Where to paste</strong>: inside the <code>&lt;div class="edu-grid"&gt;</code>. The snippet will add a new education card.</p>' + commonSteps
+      };
+      return map[section] || ('<p>Paste the snippet near the marker <code><!-- SNIPPET-KEY: ' + key + ' --></code> in <strong>index.html</strong>.</p>' + commonSteps);
+    }
 
     // Render the generated snippet and instructions inside the Add Item modal right pane
     function renderSnippetPreview(snippetStr, section){
       if(!formContainer) return;
       formContainer.innerHTML = '';
       const wrap = document.createElement('div'); wrap.className = 'snippet-preview';
+      const key = getSectionKey(section);
+      // instructions block (friendly, for non-technical users)
+      const inst = document.createElement('div'); inst.className = 'snippet-instructions';
+      inst.innerHTML = getSectionInstructions(section, key);
+      // quick note
       const note = document.createElement('p'); note.className = 'muted-note';
-      note.textContent = 'Paste the HTML below into the appropriate place in your site. Use the copy button to copy the snippet.';
+      note.textContent = 'The snippet is shown below. Use the Copy button to copy it, then follow the simple steps above to paste it into index.html.';
+      // key row for quick copy
+      const keyRow = document.createElement('div'); keyRow.className = 'snippet-key-row';
+      const keyLabel = document.createElement('span'); keyLabel.className = 'snippet-key-label'; keyLabel.textContent = 'Search key: ';
+      const keyVal = document.createElement('code'); keyVal.className = 'snippet-key'; keyVal.textContent = key;
+      const keyCopy = document.createElement('button'); keyCopy.type = 'button'; keyCopy.className = 'btn btn--ghost'; keyCopy.textContent = 'Copy key';
+      keyRow.appendChild(keyLabel); keyRow.appendChild(keyVal); keyRow.appendChild(keyCopy);
+
       const ta = document.createElement('textarea'); ta.className = 'snippet-output'; ta.rows = 12; ta.value = snippetStr;
       ta.style.width = '100%'; ta.style.fontFamily = 'monospace'; ta.style.fontSize = '13px';
       const actions = document.createElement('div'); actions.className = 'modal-actions';
@@ -394,14 +494,16 @@ try{
       const addAnother = document.createElement('button'); addAnother.type = 'button'; addAnother.className = 'btn btn--ghost'; addAnother.textContent = 'Add another';
       const copyBtn = document.createElement('button'); copyBtn.type = 'button'; copyBtn.className = 'btn btn--primary'; copyBtn.textContent = 'Copy to clipboard';
       actions.appendChild(back); actions.appendChild(addAnother); actions.appendChild(copyBtn);
-      wrap.appendChild(note); wrap.appendChild(ta); wrap.appendChild(actions);
+
+      wrap.appendChild(inst); wrap.appendChild(note); wrap.appendChild(keyRow); wrap.appendChild(ta); wrap.appendChild(actions);
       formContainer.appendChild(wrap);
 
       back.addEventListener('click', function(e){ e.preventDefault(); renderFormFor(section); });
       addAnother.addEventListener('click', function(e){ e.preventDefault(); renderFormFor(section); /* fresh form for another item */ });
       copyBtn.addEventListener('click', function(e){ e.preventDefault(); try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(()=>{ copyBtn.textContent = 'Copied'; setTimeout(()=> copyBtn.textContent = 'Copy to clipboard',1200); }).catch(()=>{}); } else { ta.select(); document.execCommand('copy'); copyBtn.textContent = 'Copied'; setTimeout(()=> copyBtn.textContent = 'Copy to clipboard',1200); } }catch(err){ console.error('Copy failed', err); } });
+      keyCopy.addEventListener('click', function(e){ e.preventDefault(); try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(key).then(()=>{ keyCopy.textContent = 'Copied'; setTimeout(()=> keyCopy.textContent = 'Copy key',1200); }).catch(()=>{}); } else { const tmp = document.createElement('textarea'); tmp.value = key; document.body.appendChild(tmp); tmp.select(); document.execCommand('copy'); tmp.remove(); keyCopy.textContent = 'Copied'; setTimeout(()=> keyCopy.textContent = 'Copy key',1200); } }catch(err){ console.error('Copy key failed', err); } });
 
-      // attempt an automatic background copy like before
+      // attempt an automatic background copy like before (copy only the snippet content)
       try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(snippetStr).catch(()=>{}); } }catch(e){}
     }
 
@@ -423,6 +525,11 @@ try{
         L('<label>Logo src (optional)<br><input name="logoSrc" placeholder="assets/logos/example.png"></label>');
       } else if(section === 'technical-skills'){
         L('<label>Skill name<br><input name="skill" placeholder="Python / Playwright" required></label>');
+        // build a dropdown of existing categories present on the page and a text input to create a new one
+        const existingCats = Array.from(document.querySelectorAll('.expertise-category .expertise-category-title')).map(n=> (n.textContent||'').trim()).filter(Boolean);
+        const opts = ['<option value="">— select existing —</option>'].concat(existingCats.map(c=> '<option value="'+esc(c)+'">'+esc(c)+'</option>')).join('');
+        L('<label>Choose existing category<br><select name="categorySelect">'+opts+'</select></label>');
+        L('<label>Or create new category<br><input name="categoryText" placeholder="Language / Framework / Tool"></label>');
         L('<label>Optional details (comma separated)<br><input name="details" placeholder="API Testing, CI/CD"></label>');
       } else if(section === 'professional-development'){
         L('<label>Title<br><input name="title" placeholder="Advanced Python for Test Automation" required></label>');
@@ -477,9 +584,14 @@ try{
             snippetStr = parts.join('\n');
           } else if(section === 'technical-skills'){
             const skill = (fd.get('skill')||'').trim();
+            const selected = (fd.get('categorySelect')||'').trim();
+            const categoryText = (fd.get('categoryText')||'').trim();
+            const category = selected || categoryText; // prefer dropdown when selected
             const details = (fd.get('details')||'').trim();
             const parts = [];
-            parts.push('<div class="skill-badge">'+esc(skill)+'</div>');
+            // render a badge and, when a category is present, include it as a data attribute
+            const attr = category ? ' data-category="'+esc(category)+'"' : '';
+            parts.push('<div class="skill-badge"'+attr+'>'+esc(skill)+'</div>');
             if(details) parts.push('<!-- '+esc(details)+' -->');
             snippetStr = parts.join('\n');
           } else if(section === 'professional-development'){
