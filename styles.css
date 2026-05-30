@@ -1481,27 +1481,28 @@ body.light-mode .edu-card .experience-meta{ color:#475569; }
   .experience-section .timeline #olderExperiences .experience-item { display: none !important; }
   /* Keep full skills visible but pack them tighter into more columns */
   #fullSkills { display:block !important; }
+  /* tighten top-skills for print */
   .top-skills { display:flex !important; flex-wrap:wrap; gap:6px !important; }
-  .skill-badge{ padding:6px 10px !important; font-size:0.9rem !important; }
+  .skill-badge{ padding:5px 8px !important; font-size:0.85rem !important; }
   /* Make grouped skill categories flow as a responsive grid in print so they use horizontal
      space efficiently and reduce tall empty gaps beside long categories like QA Skills. */
   .grouped-skills {
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
-    gap: 8px !important;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+    gap: 6px !important;
     align-items: start !important;
     width: 100% !important;
   }
   .grouped-skills > .expertise-category {
     margin: 0 !important;
-    padding: 8px 10px !important;
+    padding: 6px 8px !important;
     min-height: 0 !important;
     height: auto !important;
     page-break-inside: avoid !important;
   }
-  .grouped-skills > .expertise-category .expertise-category-title { margin-bottom: 6px !important; font-size: 1.02rem !important; }
-  .grouped-skills > .expertise-category .mini-skill-cards { gap: 6px !important; }
-  .mini-skill-card { padding: 6px 10px !important; font-size: 0.92rem !important; }
+  .grouped-skills > .expertise-category .expertise-category-title { margin-bottom: 4px !important; font-size: 0.98rem !important; }
+  .grouped-skills > .expertise-category .mini-skill-cards { gap: 4px !important; }
+  .mini-skill-card { padding: 5px 8px !important; font-size: 0.84rem !important; }
   /* Allow QA Skills card to span full width in print and lay out its badges into columns
      so the long QA list uses horizontal space and reduces vertical height.
      Also make it the top-most category by placing it in row 1 of the grid. */

@@ -81,8 +81,5 @@ window.updateConnectors()
 
 ## Contributing / Automation
 
-This repository is intentionally static. If you want automated persistence of generated experiences, I can implement a safe, reversible workflow that writes a marked block into `index.html` (so generated entries can be removed later). Tell me if you want that and I will implement it.
+This repository is intentionally static and to be used as Github Pages
 
----
-
-If you'd like any wording changes, extra screenshots, or a short demo GIF to include in the README, tell me which section to update and I'll revise. 99% certain.
