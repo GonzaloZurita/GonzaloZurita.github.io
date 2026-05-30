@@ -1135,6 +1135,52 @@ body.light-mode footer {
   background: var(--overlay-gradient-3);
   box-shadow: 0 12px 36px rgba(2,6,23,0.45);
 }
+
+/* Add Item Menu - stable fixed-size modal that reuses existing modal styles */
+.modal.modal--three-col {
+  width: 920px; /* stable width for better UX */
+  max-width: 96%;
+  height: 900px; /* fixed height increased by ~200px */
+  min-height: 900px;
+  max-height: 96vh;
+  border-radius: 12px;
+  padding: 0; /* inner container handles padding */
+  overflow: hidden; /* keep layout stable and let inner panes scroll */
+}
+.modal.modal--three-col .modal-inner { display:flex; gap:18px; align-items:stretch; height:100%; }
+.add-item-list {
+  padding: 16px;
+  border-right: 1px solid rgba(255,255,255,0.03);
+  background: transparent;
+  flex: 0 0 220px; /* fixed left column width */
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.add-item-list h4 { margin:0 0 8px 0; color:var(--accent-2); }
+.add-item-option {
+  display:block;
+  padding:8px 10px;
+  background:transparent;
+  color:var(--muted-text);
+  border:none;
+  text-align:left;
+  cursor:pointer;
+}
+.add-item-option.active{ color:var(--accent-2); font-weight:700; }
+.add-item-form { padding: 18px; display:flex; flex-direction:column; gap:12px; overflow:auto; }
+.add-item-form input, .add-item-form textarea { border-radius:8px; border:1px solid var(--border-muted); background:var(--bg-850); color:var(--muted-text); padding:8px 10px; }
+@media(max-width:900px){
+  .modal.modal--three-col { width:96%; height:92vh; min-height:0; }
+  .add-item-list { flex:0 0 140px; padding:12px; }
+  .add-item-form { max-height: none; }
+}
+
+/* Make the right pane scrollable while keeping modal size fixed */
+#addItemFormContainer { flex: 1 1 auto; overflow: auto; height:100%; }
+.add-item-form { flex: 1 1 auto; }
+.add-item-form .modal-actions { margin-top: 12px; /* keep actions visible below form content */ }
 @media(max-width: 900px) {
   .grouped-skills {
     grid-template-columns: 1fr;

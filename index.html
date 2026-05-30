@@ -315,8 +315,34 @@
         </div>
       </div>
     </div>
+    
+      <!-- Add Item Menu: left-nav + right-content modal -->
+      <div id="addItemMenu" class="modal-overlay is-hidden" aria-hidden="true">
+        <div class="modal modal--three-col" role="dialog" aria-modal="true" aria-labelledby="addItemMenuTitle">
+          <div class="modal-inner" style="display:flex; gap:18px; align-items:stretch;">
+            <nav id="addItemList" class="add-item-list" style="flex:0 0 220px; padding:18px; border-right:1px solid rgba(255,255,255,0.03);">
+              <h4 id="addItemMenuTitle">Add Item</h4>
+              <button class="add-item-option" data-section="experience">Experience</button>
+              <button class="add-item-option" data-section="technical-skills">Technical Skill</button>
+              <button class="add-item-option" data-section="professional-development">Professional Development</button>
+              <button class="add-item-option" data-section="interests">Interest</button>
+              <button class="add-item-option" data-section="recommendations">Recommendation</button>
+              <button class="add-item-option" data-section="education">Education</button>
+            </nav>
+            <div style="flex:1 1 auto; display:flex; flex-direction:column;">
+              <div style="padding:18px 20px; border-bottom:1px solid rgba(255,255,255,0.03);">
+                <h4 id="addItemFormTitle">Add Item</h4>
+              </div>
+              <div id="addItemFormContainer" style="padding:18px; flex:1 1 auto; overflow:auto;"></div>
+              <div class="modal-actions" style="padding:12px 18px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid rgba(255,255,255,0.03);">
+                <button id="addItemCancel" class="btn btn--ghost">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- PROFESSIONAL DEVELOPMENT -->
+      <!-- PROFESSIONAL DEVELOPMENT -->
     <section id="professional-development" class="main-section">
       <h3 class="section-title" data-i18n="sections.professional_development">Professional Development</h3>
       <p class="muted-note mt-neg-8 mb-18" data-i18n="sections.professional_development_note">These are current, ongoing learning topics and courses I'm actively studying.</p>
